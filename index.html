@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>ניהול כספים - מאור ועידו</title>
+  <title>ניהול כספים - מאור, עידו ועסק</title>
   
   <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;700&display=swap" rel="stylesheet">
 
@@ -43,32 +43,23 @@
       box-shadow: var(--shadow);
       padding: 30px;
       overflow: hidden;
-      position: relative; /* חשוב עבור מיקום הלוגואים */
+      position: relative; 
     }
 
     /* --- הגדרות הלוגו בפינות --- */
     .corner-logo {
       position: absolute;
       top: 20px;
-      width: 50px; /* גודל הלוגו - שנה לפי הצורך */
+      width: 50px;
       height: auto;
       opacity: 0.9;
     }
 
-    .logo-right {
-      right: 20px;
-    }
+    .logo-right { right: 20px; }
+    .logo-left { left: 20px; }
 
-    .logo-left {
-      left: 20px;
-    }
-
-    /* התאמה למובייל - אם המסך צר מדי, נקטין מעט את הלוגו */
     @media (max-width: 400px) {
-      .corner-logo {
-        width: 40px;
-        top: 15px;
-      }
+      .corner-logo { width: 40px; top: 15px; }
       .logo-right { right: 15px; }
       .logo-left { left: 15px; }
     }
@@ -78,15 +69,15 @@
       font-size: 1.5rem;
       font-weight: 700;
       color: var(--text-main);
-      margin-top: 10px; /* רווח קטן כדי שהלוגואים לא ייגעו בטקסט */
+      margin-top: 10px;
       margin-bottom: 25px;
     }
 
-    /* --- שאר ה-CSS נשאר זהה --- */
+    /* --- אזור הסכומים הכוללים --- */
     .totals-container {
       display: flex;
       justify-content: space-between;
-      gap: 15px;
+      gap: 10px; /* הקטנתי מעט את הרווח כדי ש-3 ייכנסו יפה */
       margin-bottom: 30px;
       padding-bottom: 20px;
       border-bottom: 1px solid var(--border-color);
@@ -96,23 +87,26 @@
       flex: 1;
       text-align: center;
       background: #F9FAFB;
-      padding: 15px;
+      padding: 10px; /* הקטנתי מעט כדי לחסוך מקום */
       border-radius: 16px;
       border: 1px solid var(--border-color);
+      min-width: 0; /* מונע שבירה במסכים צרים מאוד */
     }
 
     .total-label {
       font-size: 0.85rem;
       color: var(--text-secondary);
       margin-bottom: 5px;
+      white-space: nowrap;
     }
 
     .total-value {
-      font-size: 1.5rem;
+      font-size: 1.2rem; /* הקטנתי מעט כדי שהמספרים לא יגלשו */
       font-weight: 700;
       color: var(--primary-color);
     }
 
+    /* --- בחירת משתמש --- */
     .section-title {
       font-size: 0.95rem;
       font-weight: 500;
@@ -123,7 +117,7 @@
 
     .user-selector {
       display: flex;
-      gap: 15px;
+      gap: 10px;
       margin-bottom: 25px;
     }
 
@@ -144,14 +138,16 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 15px;
+      padding: 12px 5px; /* פחות ריפוד כדי ש-3 ייכנסו */
       background: #fff;
       border: 2px solid var(--border-color);
       border-radius: 12px;
       cursor: pointer;
       font-weight: 500;
+      font-size: 0.95rem;
       transition: all 0.2s ease;
       color: var(--text-secondary);
+      white-space: nowrap;
     }
 
     .user-option input[type="radio"]:checked + .user-card {
@@ -162,6 +158,7 @@
       box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.2); 
     }
 
+    /* --- שאר האלמנטים --- */
     .quick-amounts {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -181,11 +178,7 @@
       font-family: 'Rubik', sans-serif;
     }
 
-    .amount-btn:hover {
-      background-color: #F3F4F6;
-      border-color: #D1D5DB;
-    }
-
+    .amount-btn:hover { background-color: #F3F4F6; border-color: #D1D5DB; }
     .amount-btn:active {
       transform: scale(0.95);
       background-color: var(--primary-color);
@@ -194,9 +187,7 @@
     }
 
     .input-group { margin-bottom: 15px; }
-
     .input-wrapper { position: relative; }
-
     .input-wrapper input {
       width: 100%;
       padding: 14px 15px;
@@ -208,14 +199,12 @@
       transition: border-color 0.2s;
       background: #F9FAFB;
     }
-
     .input-wrapper input:focus {
       outline: none;
       border-color: var(--primary-color);
       background: #fff;
       box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1); 
     }
-
     .optional-tag {
       position: absolute;
       left: 15px;
@@ -241,19 +230,9 @@
       margin-top: 10px;
       box-shadow: 0 4px 6px rgba(5, 150, 105, 0.3); 
     }
-
-    .submit-btn:hover {
-      background-color: var(--primary-hover);
-      transform: translateY(-1px);
-    }
-
+    .submit-btn:hover { background-color: var(--primary-hover); transform: translateY(-1px); }
     .submit-btn:active { transform: translateY(1px); }
-    .submit-btn:disabled {
-      background-color: #9CA3AF;
-      cursor: not-allowed;
-      transform: none;
-      box-shadow: none;
-    }
+    .submit-btn:disabled { background-color: #9CA3AF; cursor: not-allowed; transform: none; box-shadow: none; }
 
     .status {
       margin-top: 15px;
@@ -297,6 +276,10 @@
         <div class="total-label">עידו</div>
         <div class="total-value" id="totalIdo">0 ₪</div>
       </div>
+      <div class="total-card">
+        <div class="total-label">עסק</div>
+        <div class="total-value" id="totalBusiness">0 ₪</div>
+      </div>
     </div>
 
     <span class="section-title">למי לעדכן?</span>
@@ -308,6 +291,10 @@
       <label class="user-option">
         <input type="radio" name="user" value="עידו">
         <div class="user-card">עידו</div>
+      </label>
+      <label class="user-option">
+        <input type="radio" name="user" value="עסק">
+        <div class="user-card">עסק</div>
       </label>
     </div>
 
@@ -339,21 +326,24 @@
   <script>
     // ==========================================
     // נא להדביק כאן את כתובת ה-Apps Script שלך
-    const API_URL = 'https://script.google.com/macros/s/AKfycbzF7IdCdT0joDICVwj7tP8rpFLRuLbyXs5dc6TsYYNy-xSWCYHYLbgzh8oHga3LvInTOw/exec';
+    const API_URL = 'YOUR_GOOGLE_SCRIPT_WEB_APP_URL_HERE';
     // ==========================================
 
     const statusEl = document.getElementById('status');
     const totalMaorEl = document.getElementById('totalMaor');
     const totalIdoEl = document.getElementById('totalIdo');
+    const totalBusinessEl = document.getElementById('totalBusiness'); // אלמנט חדש לעסק
     const manualAmountInput = document.getElementById('manualAmount');
     const noteInput = document.getElementById('note');
     const submitBtn = document.getElementById('submitBtn');
 
-    const USER_STORAGE_KEY = 'selectedUserMaorIdo_V3';
+    const USER_STORAGE_KEY = 'selectedUserMaorIdoBusiness_V1';
 
     function initUserSelection() {
       const radios = document.querySelectorAll('input[name="user"]');
       const savedUser = localStorage.getItem(USER_STORAGE_KEY);
+      
+      // אם אין משתמש שמור, נבחר את מאור כברירת מחדל
       let userToSelect = savedUser || 'מאור';
       
       const radioToCheck = Array.from(radios).find(r => r.value === userToSelect);
@@ -386,7 +376,7 @@
       statusEl.textContent = '';
 
       if (!user) {
-        statusEl.textContent = 'יש לבחור משתמש';
+        statusEl.textContent = 'יש לבחור למי לעדכן';
         statusEl.classList.add('error');
         return;
       }
@@ -446,6 +436,8 @@
 
         totalMaorEl.textContent = (totals['מאור'] || 0).toLocaleString() + ' ₪';
         totalIdoEl.textContent = (totals['עידו'] || 0).toLocaleString() + ' ₪';
+        totalBusinessEl.textContent = (totals['עסק'] || 0).toLocaleString() + ' ₪';
+        
       } catch (err) {
         console.error("Error loading totals:", err);
       }
