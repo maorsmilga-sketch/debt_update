@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>ניהול חובות - עידו ומאור</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 500px;
+      margin: 20px auto;
+      padding: 20px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+    }
+    h1, h2 {
+      text-align: center;
+    }
+    .section {
+      margin-bottom: 20px;
+    }
+    .user-select, .amount-area, .totals {
+      margin-top: 10px;
+    }
+    .buttons-row button {
+      margin: 5px;
+      padding: 10px 15px;
+      cursor: pointer;
+    }
+    .totals div {
+      margin: 5px 0;
+      font-size: 1.1em;
+      font-weight: bold;
+    }
+    .status {
+      margin-top: 10px;
+      min-height: 20px;
+      font-size: 0.9em;
+    }
+    input[type="number"] {
+      padding: 5px;
+      width: 120px;
+    }
+    button.submit-btn {
+      margin-top: 10px;
+      padding: 10px 20px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>ניהול סכומים - מאור / עידו</h1>
+
+  <div class="section user-select">
+    <h2>בחר משתמש</h2>
+    <label>
+      <input type="radio" name="user" value="מאור" checked>
+      מאור
+    </label>
+    <label style="margin-right: 15px;">
+      <input type="radio" name="user" value="עידו">
+      עידו
+    </label>
+  </div>
+
+  <div class="section amount-area">
+    <h2>בחר סכום או הזן ידנית</h2>
+
+    <div class="buttons-row">
+      <!-- אפשר לשנות/להוסיף ערכים בקלות -->
+      <button type="button" data-amount="50">50 ₪</button>
+      <button type="button" data-amount="100">100 ₪</button>
+      <button type="button" data-amount="150">150 ₪</button>
+      <button type="button" data-amount="200">200 ₪</button>
+    </div>
+
+    <div style="margin-top:10px;">
+      <label>
+        סכום ידני (אפשר גם מינוס): 
+        <input type="number" id="manualAmount" step="1">
+      </label>
+    </div>
+
+    <button class="submit-btn" id="submitBtn">עדכן סכום</button>
+
+    <div class="status" id="status"></div>
+  </div>
+
+  <div class="section totals">
+    <h2>סיכום נוכחי</h2>
+    <div>סה"כ מאור: <span id="totalMaor">0</span> ₪</div>
+    <div>סה"כ עידו: <span id="totalIdo">0</span> ₪</div>
+  </div>
+
+  <script>
+    // === חשוב ===
+    // כאן תדביק את ה-URL של ה-Web App של ה-Google Apps Script
+    const API_URL = 'PASTE_YOUR_WEB_APP_URL_HERE';
+
+    const statusEl = document.getElementById('status');
+    const totalMaorEl = document.getElementById('totalMaor');
+    const totalIdoEl = document.getElementById('totalIdo');
+    const manualAmountInput = document.getElementById('manualAmount');
+    const submitBtn = document.getElementById('submitBtn');
+
+    // לחיצה על כפתור סכום קבוע - ממלאת את הקלט הידני
+    document.querySelectorAll('.buttons-row button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const amount = btn.getAttribute('data-amount');
+        manualAmountInput.value = amount;
+      });
+    });
+
+    // שליחת עדכון סכום
+    submitBtn.addEventListener('click', async () => {
+      const user = document.querySelector('input[name="user"]:checked').value;
+      const amountStr = manualAmountInput.value.trim();
+
+      if (!amountStr) {
+        statusEl.textContent = 'אנא הזן סכום (אפשר גם מינוס).';
+        return;
+      }
+
+      const amount = parseFloat(amountStr);
+      if (isNaN(amount)) {
+        statusEl.textContent = 'הסכום אינו תקין.';
+        return;
+      }
+
+      statusEl.textContent = 'שולח עדכון...';
+
+      try {
+        const res = await fetch(API_URL, {
+          method: 'POST',
+          mode: 'no-cors', // אם תגדיר CORS נכון, אפשר להסיר / לשנות
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ user, amount })
+        });
+
+        // בגלל no-cors אי אפשר לקרוא תשובה,
+        // לכן אחרי POST נקרא שוב את totals עם GET
+        statusEl.textContent = 'העדכון נשלח, טוען סכומים...';
+        manualAmountInput.value = '';
+        await loadTotals();
+        statusEl.textContent = 'הסכומים עודכנו בהצלחה ✔';
+      } catch (err) {
+        console.error(err);
+        statusEl.textContent = 'שגיאה בשליחת הנתונים.';
+      }
+    });
+
+    // טעינת סיכומים נוכחיים מהשרת
+    async function loadTotals() {
+      try {
+        const res = await fetch(API_URL); // GET = doGet
+        const data = await res.json();
+        const totals = data.totals || {};
+
+        totalMaorEl.textContent = totals['מאור'] ?? 0;
+        totalIdoEl.textContent = totals['עידו'] ?? 0;
+      } catch (err) {
+        console.error(err);
+        statusEl.textContent = 'שגיאה בטעינת הסיכומים.';
+      }
+    }
+
+    // כשנטען העמוד - נטען סכומים ראשוניים
+    loadTotals();
+  </script>
+</body>
+</html>
