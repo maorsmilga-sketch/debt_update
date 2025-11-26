@@ -9,10 +9,8 @@
 
   <style>
     :root {
-      /* ירוק אמרלד אלגנטי */
       --primary-color: #059669; 
       --primary-hover: #047857; 
-      
       --bg-color: #F3F4F6;
       --card-bg: #ffffff;
       --text-main: #1F2937;
@@ -46,7 +44,7 @@
       position: relative; 
     }
 
-    /* --- הגדרות הלוגו בפינות --- */
+    /* לוגואים */
     .corner-logo {
       position: absolute;
       top: 20px;
@@ -54,7 +52,6 @@
       height: auto;
       opacity: 0.9;
     }
-
     .logo-right { right: 20px; }
     .logo-left { left: 20px; }
 
@@ -73,11 +70,11 @@
       margin-bottom: 25px;
     }
 
-    /* --- אזור הסכומים הכוללים --- */
+    /* --- סיכומים וטעינה --- */
     .totals-container {
       display: flex;
       justify-content: space-between;
-      gap: 10px; /* הקטנתי מעט את הרווח כדי ש-3 ייכנסו יפה */
+      gap: 10px;
       margin-bottom: 30px;
       padding-bottom: 20px;
       border-bottom: 1px solid var(--border-color);
@@ -87,10 +84,11 @@
       flex: 1;
       text-align: center;
       background: #F9FAFB;
-      padding: 10px; /* הקטנתי מעט כדי לחסוך מקום */
+      padding: 10px;
       border-radius: 16px;
       border: 1px solid var(--border-color);
-      min-width: 0; /* מונע שבירה במסכים צרים מאוד */
+      min-width: 0;
+      position: relative;
     }
 
     .total-label {
@@ -101,12 +99,48 @@
     }
 
     .total-value {
-      font-size: 1.2rem; /* הקטנתי מעט כדי שהמספרים לא יגלשו */
+      font-size: 1.2rem;
       font-weight: 700;
       color: var(--primary-color);
+      min-height: 24px; /* שומר מקום לתוכן */
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
-    /* --- בחירת משתמש --- */
+    /* --- Skeleton Loader Animation (אנימציית שלד) --- */
+    .skeleton {
+      background: linear-gradient(90deg, #e0e0e0 25%, #f0f0f0 50%, #e0e0e0 75%);
+      background-size: 200% 100%;
+      animation: loading 1.5s infinite;
+      border-radius: 4px;
+      width: 70%;
+      height: 20px;
+      display: inline-block;
+    }
+
+    @keyframes loading {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    /* אייקון טעינה קטן כשמרעננים מידע קיים */
+    .refresh-spinner {
+      width: 12px;
+      height: 12px;
+      border: 2px solid #ccc;
+      border-top-color: var(--primary-color);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      position: absolute;
+      top: 5px;
+      left: 5px;
+      display: none; /* מוסתר כברירת מחדל */
+    }
+    .refreshing .refresh-spinner { display: block; }
+
+
+    /* --- שאר העיצוב (ללא שינוי) --- */
     .section-title {
       font-size: 0.95rem;
       font-weight: 500;
@@ -114,171 +148,75 @@
       margin-bottom: 10px;
       display: block;
     }
-
-    .user-selector {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 25px;
-    }
-
-    .user-option {
-      flex: 1;
-      position: relative;
-    }
-
-    .user-option input[type="radio"] {
-      position: absolute;
-      opacity: 0;
-      cursor: pointer;
-      height: 0;
-      width: 0;
-    }
-
+    .user-selector { display: flex; gap: 10px; margin-bottom: 25px; }
+    .user-option { flex: 1; position: relative; }
+    .user-option input[type="radio"] { position: absolute; opacity: 0; cursor: pointer; height: 0; width: 0; }
     .user-card {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 12px 5px; /* פחות ריפוד כדי ש-3 ייכנסו */
-      background: #fff;
-      border: 2px solid var(--border-color);
-      border-radius: 12px;
-      cursor: pointer;
-      font-weight: 500;
-      font-size: 0.95rem;
-      transition: all 0.2s ease;
-      color: var(--text-secondary);
-      white-space: nowrap;
+      display: flex; align-items: center; justify-content: center;
+      padding: 12px 5px; background: #fff; border: 2px solid var(--border-color);
+      border-radius: 12px; cursor: pointer; font-weight: 500; font-size: 0.95rem;
+      transition: all 0.2s ease; color: var(--text-secondary); white-space: nowrap;
     }
-
     .user-option input[type="radio"]:checked + .user-card {
-      border-color: var(--primary-color);
-      background-color: #ECFDF5;
-      color: var(--primary-color);
-      font-weight: 700;
-      box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.2); 
+      border-color: var(--primary-color); background-color: #ECFDF5;
+      color: var(--primary-color); font-weight: 700; box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.2); 
     }
-
-    /* --- שאר האלמנטים --- */
-    .quick-amounts {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 10px;
-      margin-bottom: 20px;
-    }
-
+    .quick-amounts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 20px; }
     .amount-btn {
-      background: #fff;
-      border: 1px solid var(--border-color);
-      color: var(--text-main);
-      padding: 12px 0;
-      border-radius: 10px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.2s;
+      background: #fff; border: 1px solid var(--border-color); color: var(--text-main);
+      padding: 12px 0; border-radius: 10px; font-weight: 500; cursor: pointer; transition: all 0.2s;
       font-family: 'Rubik', sans-serif;
     }
-
     .amount-btn:hover { background-color: #F3F4F6; border-color: #D1D5DB; }
-    .amount-btn:active {
-      transform: scale(0.95);
-      background-color: var(--primary-color);
-      color: white;
-      border-color: var(--primary-color);
-    }
-
+    .amount-btn:active { transform: scale(0.95); background-color: var(--primary-color); color: white; border-color: var(--primary-color); }
     .input-group { margin-bottom: 15px; }
     .input-wrapper { position: relative; }
     .input-wrapper input {
-      width: 100%;
-      padding: 14px 15px;
-      border: 1px solid var(--border-color);
-      border-radius: 12px;
-      font-size: 1rem;
-      font-family: 'Rubik', sans-serif;
-      box-sizing: border-box;
-      transition: border-color 0.2s;
-      background: #F9FAFB;
+      width: 100%; padding: 14px 15px; border: 1px solid var(--border-color);
+      border-radius: 12px; font-size: 1rem; font-family: 'Rubik', sans-serif;
+      box-sizing: border-box; transition: border-color 0.2s; background: #F9FAFB;
     }
-    .input-wrapper input:focus {
-      outline: none;
-      border-color: var(--primary-color);
-      background: #fff;
-      box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1); 
-    }
-    .optional-tag {
-      position: absolute;
-      left: 15px;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 0.8rem;
-      color: #9CA3AF;
-      pointer-events: none;
-    }
-
+    .input-wrapper input:focus { outline: none; border-color: var(--primary-color); background: #fff; box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1); }
+    .optional-tag { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); font-size: 0.8rem; color: #9CA3AF; pointer-events: none; }
     .submit-btn {
-      width: 100%;
-      padding: 16px;
-      background-color: var(--primary-color);
-      color: white;
-      border: none;
-      border-radius: 14px;
-      font-size: 1.1rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background-color 0.2s, transform 0.1s;
-      font-family: 'Rubik', sans-serif;
-      margin-top: 10px;
-      box-shadow: 0 4px 6px rgba(5, 150, 105, 0.3); 
+      width: 100%; padding: 16px; background-color: var(--primary-color); color: white;
+      border: none; border-radius: 14px; font-size: 1.1rem; font-weight: 600; cursor: pointer;
+      transition: background-color 0.2s, transform 0.1s; font-family: 'Rubik', sans-serif;
+      margin-top: 10px; box-shadow: 0 4px 6px rgba(5, 150, 105, 0.3); 
     }
     .submit-btn:hover { background-color: var(--primary-hover); transform: translateY(-1px); }
     .submit-btn:active { transform: translateY(1px); }
     .submit-btn:disabled { background-color: #9CA3AF; cursor: not-allowed; transform: none; box-shadow: none; }
-
-    .status {
-      margin-top: 15px;
-      text-align: center;
-      font-size: 0.9rem;
-      min-height: 20px;
-      font-weight: 500;
-    }
+    .status { margin-top: 15px; text-align: center; font-size: 0.9rem; min-height: 20px; font-weight: 500; }
     .status.error { color: var(--error-color); }
     .status.success { color: var(--success-color); }
-    
-    .spinner {
-      display: inline-block;
-      width: 12px;
-      height: 12px;
-      border: 2px solid rgba(255,255,255,0.3);
-      border-radius: 50%;
-      border-top-color: #fff;
-      animation: spin 1s ease-in-out infinite;
-      margin-left: 8px;
-    }
+    .spinner { display: inline-block; width: 12px; height: 12px; border: 2px solid rgba(255,255,255,0.3); border-radius: 50%; border-top-color: #fff; animation: spin 1s ease-in-out infinite; margin-left: 8px; }
     @keyframes spin { to { transform: rotate(360deg); } }
-
   </style>
 </head>
 <body>
 
   <div class="container">
-    
     <img src="logo1.png" alt="לוגו עץ" class="corner-logo logo-right">
     <img src="logo1.png" alt="לוגו עץ" class="corner-logo logo-left">
     
     <h1>ניהול כספים</h1>
 
     <div class="totals-container">
-      <div class="total-card">
+      <div class="total-card" id="cardMaor">
+        <div class="refresh-spinner"></div>
         <div class="total-label">מאור</div>
-        <div class="total-value" id="totalMaor">0 ₪</div>
+        <div class="total-value" id="totalMaor"><span class="skeleton"></span></div>
       </div>
-      <div class="total-card">
+      <div class="total-card" id="cardIdo">
+        <div class="refresh-spinner"></div>
         <div class="total-label">עידו</div>
-        <div class="total-value" id="totalIdo">0 ₪</div>
+        <div class="total-value" id="totalIdo"><span class="skeleton"></span></div>
       </div>
-      <div class="total-card">
+      <div class="total-card" id="cardBusiness">
+        <div class="refresh-spinner"></div>
         <div class="total-label">עסק</div>
-        <div class="total-value" id="totalBusiness">0 ₪</div>
+        <div class="total-value" id="totalBusiness"><span class="skeleton"></span></div>
       </div>
     </div>
 
@@ -325,25 +263,24 @@
 
   <script>
     // ==========================================
-    // נא להדביק כאן את כתובת ה-Apps Script שלך
-    const API_URL = 'https://script.google.com/macros/s/AKfycbxt7VJkVGDiZ8BNyL4Oa0aGhPjV56iUtILDyTDrESe5h9wGY4nVj6yvOoTBbDLHbycb2g/exec';
+    const API_URL = 'YOUR_GOOGLE_SCRIPT_WEB_APP_URL_HERE';
     // ==========================================
 
     const statusEl = document.getElementById('status');
     const totalMaorEl = document.getElementById('totalMaor');
     const totalIdoEl = document.getElementById('totalIdo');
-    const totalBusinessEl = document.getElementById('totalBusiness'); // אלמנט חדש לעסק
+    const totalBusinessEl = document.getElementById('totalBusiness');
     const manualAmountInput = document.getElementById('manualAmount');
     const noteInput = document.getElementById('note');
     const submitBtn = document.getElementById('submitBtn');
 
+    // מפתחות לזכרון מקומי
     const USER_STORAGE_KEY = 'selectedUserMaorIdoBusiness_V1';
+    const TOTALS_CACHE_KEY = 'cachedTotals_V1';
 
     function initUserSelection() {
       const radios = document.querySelectorAll('input[name="user"]');
       const savedUser = localStorage.getItem(USER_STORAGE_KEY);
-      
-      // אם אין משתמש שמור, נבחר את מאור כברירת מחדל
       let userToSelect = savedUser || 'מאור';
       
       const radioToCheck = Array.from(radios).find(r => r.value === userToSelect);
@@ -409,11 +346,11 @@
 
         statusEl.textContent = 'עודכן בהצלחה!';
         statusEl.classList.add('success');
-        
         manualAmountInput.value = '';
         noteInput.value = '';
         
-        await loadTotals();
+        // לאחר עדכון, נטען שוב מהשרת
+        await loadTotals(true);
 
       } catch (err) {
         console.error(err);
@@ -428,18 +365,50 @@
       }
     });
 
-    async function loadTotals() {
+    // פונקציה שמציגה נתונים על המסך
+    function renderTotals(totals) {
+      if (!totals) return;
+      totalMaorEl.innerHTML = (totals['מאור'] || 0).toLocaleString() + ' ₪';
+      totalIdoEl.innerHTML = (totals['עידו'] || 0).toLocaleString() + ' ₪';
+      totalBusinessEl.innerHTML = (totals['עסק'] || 0).toLocaleString() + ' ₪';
+    }
+
+    // פונקציית הטעינה החכמה
+    async function loadTotals(forceRefresh = false) {
+      
+      // 1. נסה לטעון מהזיכרון המקומי קודם כל (לתצוגה מיידית)
+      const cachedData = localStorage.getItem(TOTALS_CACHE_KEY);
+      
+      if (cachedData && !forceRefresh) {
+        // מציגים את המידע הישן מיד
+        renderTotals(JSON.parse(cachedData));
+        // מוסיפים אינדיקציה שאנחנו מרעננים ברקע (spinner קטן בצד)
+        document.querySelectorAll('.total-card').forEach(el => el.classList.add('refreshing'));
+      }
+
       try {
+        // 2. מבצעים את הבקשה האמיתית לשרת
         const res = await fetch(API_URL);
         const data = await res.json();
         const totals = data.totals || {};
 
-        totalMaorEl.textContent = (totals['מאור'] || 0).toLocaleString() + ' ₪';
-        totalIdoEl.textContent = (totals['עידו'] || 0).toLocaleString() + ' ₪';
-        totalBusinessEl.textContent = (totals['עסק'] || 0).toLocaleString() + ' ₪';
-        
+        // 3. שומרים את המידע החדש בזיכרון המקומי לפעם הבאה
+        localStorage.setItem(TOTALS_CACHE_KEY, JSON.stringify(totals));
+
+        // 4. מעדכנים את המסך עם המידע המעודכן ביותר
+        renderTotals(totals);
+
       } catch (err) {
         console.error("Error loading totals:", err);
+        // אם הייתה שגיאה ואין לנו כלום בזיכרון, נשאיר את אנימציית הטעינה או נציג שגיאה
+        if (!cachedData) {
+            totalMaorEl.innerHTML = '-';
+            totalIdoEl.innerHTML = '-';
+            totalBusinessEl.innerHTML = '-';
+        }
+      } finally {
+        // מסירים את הספינר הקטן של הרענון
+        document.querySelectorAll('.total-card').forEach(el => el.classList.remove('refreshing'));
       }
     }
 
@@ -449,4 +418,3 @@
   </script>
 </body>
 </html>
-
