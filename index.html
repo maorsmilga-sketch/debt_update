@@ -2,172 +2,458 @@
 <html lang="he" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <title>ניהול חובות - עידו ומאור</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>ניהול כספים - מאור ועידו</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;700&display=swap" rel="stylesheet">
+
   <style>
+    :root {
+      /* ירוק אמרלד אלגנטי */
+      --primary-color: #059669; 
+      --primary-hover: #047857; 
+      
+      --bg-color: #F3F4F6;
+      --card-bg: #ffffff;
+      --text-main: #1F2937;
+      --text-secondary: #6B7280;
+      --border-color: #E5E7EB;
+      --success-color: #10B981;
+      --error-color: #EF4444;
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+
     body {
-      font-family: Arial, sans-serif;
-      max-width: 500px;
-      margin: 20px auto;
+      font-family: 'Rubik', sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       padding: 20px;
-      border: 1px solid #ddd;
-      border-radius: 10px;
     }
-    h1, h2 {
+
+    .container {
+      background: var(--card-bg);
+      width: 100%;
+      max-width: 450px;
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      padding: 30px;
+      overflow: hidden;
+      position: relative; /* חשוב עבור מיקום הלוגואים */
+    }
+
+    /* --- הגדרות הלוגו בפינות --- */
+    .corner-logo {
+      position: absolute;
+      top: 20px;
+      width: 50px; /* גודל הלוגו - שנה לפי הצורך */
+      height: auto;
+      opacity: 0.9;
+    }
+
+    .logo-right {
+      right: 20px;
+    }
+
+    .logo-left {
+      left: 20px;
+    }
+
+    /* התאמה למובייל - אם המסך צר מדי, נקטין מעט את הלוגו */
+    @media (max-width: 400px) {
+      .corner-logo {
+        width: 40px;
+        top: 15px;
+      }
+      .logo-right { right: 15px; }
+      .logo-left { left: 15px; }
+    }
+
+    h1 {
       text-align: center;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-top: 10px; /* רווח קטן כדי שהלוגואים לא ייגעו בטקסט */
+      margin-bottom: 25px;
     }
-    .section {
+
+    /* --- שאר ה-CSS נשאר זהה --- */
+    .totals-container {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .total-card {
+      flex: 1;
+      text-align: center;
+      background: #F9FAFB;
+      padding: 15px;
+      border-radius: 16px;
+      border: 1px solid var(--border-color);
+    }
+
+    .total-label {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      margin-bottom: 5px;
+    }
+
+    .total-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--primary-color);
+    }
+
+    .section-title {
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    .user-selector {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+
+    .user-option {
+      flex: 1;
+      position: relative;
+    }
+
+    .user-option input[type="radio"] {
+      position: absolute;
+      opacity: 0;
+      cursor: pointer;
+      height: 0;
+      width: 0;
+    }
+
+    .user-card {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 15px;
+      background: #fff;
+      border: 2px solid var(--border-color);
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.2s ease;
+      color: var(--text-secondary);
+    }
+
+    .user-option input[type="radio"]:checked + .user-card {
+      border-color: var(--primary-color);
+      background-color: #ECFDF5;
+      color: var(--primary-color);
+      font-weight: 700;
+      box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.2); 
+    }
+
+    .quick-amounts {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
       margin-bottom: 20px;
     }
-    .user-select, .amount-area, .totals {
-      margin-top: 10px;
-    }
-    .buttons-row button {
-      margin: 5px;
-      padding: 10px 15px;
+
+    .amount-btn {
+      background: #fff;
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 12px 0;
+      border-radius: 10px;
+      font-weight: 500;
       cursor: pointer;
+      transition: all 0.2s;
+      font-family: 'Rubik', sans-serif;
     }
-    .totals div {
-      margin: 5px 0;
-      font-size: 1.1em;
-      font-weight: bold;
+
+    .amount-btn:hover {
+      background-color: #F3F4F6;
+      border-color: #D1D5DB;
     }
+
+    .amount-btn:active {
+      transform: scale(0.95);
+      background-color: var(--primary-color);
+      color: white;
+      border-color: var(--primary-color);
+    }
+
+    .input-group { margin-bottom: 15px; }
+
+    .input-wrapper { position: relative; }
+
+    .input-wrapper input {
+      width: 100%;
+      padding: 14px 15px;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      font-size: 1rem;
+      font-family: 'Rubik', sans-serif;
+      box-sizing: border-box;
+      transition: border-color 0.2s;
+      background: #F9FAFB;
+    }
+
+    .input-wrapper input:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      background: #fff;
+      box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1); 
+    }
+
+    .optional-tag {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 0.8rem;
+      color: #9CA3AF;
+      pointer-events: none;
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 16px;
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 14px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s, transform 0.1s;
+      font-family: 'Rubik', sans-serif;
+      margin-top: 10px;
+      box-shadow: 0 4px 6px rgba(5, 150, 105, 0.3); 
+    }
+
+    .submit-btn:hover {
+      background-color: var(--primary-hover);
+      transform: translateY(-1px);
+    }
+
+    .submit-btn:active { transform: translateY(1px); }
+    .submit-btn:disabled {
+      background-color: #9CA3AF;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
     .status {
-      margin-top: 10px;
+      margin-top: 15px;
+      text-align: center;
+      font-size: 0.9rem;
       min-height: 20px;
-      font-size: 0.9em;
+      font-weight: 500;
     }
-    input[type="number"] {
-      padding: 5px;
-      width: 120px;
+    .status.error { color: var(--error-color); }
+    .status.success { color: var(--success-color); }
+    
+    .spinner {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-radius: 50%;
+      border-top-color: #fff;
+      animation: spin 1s ease-in-out infinite;
+      margin-left: 8px;
     }
-    button.submit-btn {
-      margin-top: 10px;
-      padding: 10px 20px;
-      font-weight: bold;
-    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
   </style>
 </head>
 <body>
-  <h1>ניהול סכומים - מאור / עידו</h1>
 
-  <div class="section user-select">
-    <h2>בחר משתמש</h2>
-    <label>
-      <input type="radio" name="user" value="מאור" checked>
-      מאור
-    </label>
-    <label style="margin-right: 15px;">
-      <input type="radio" name="user" value="עידו">
-      עידו
-    </label>
-  </div>
+  <div class="container">
+    
+    <img src="logo1.png" alt="לוגו עץ" class="corner-logo logo-right">
+    <img src="logo1.png" alt="לוגו עץ" class="corner-logo logo-left">
+    
+    <h1>ניהול כספים</h1>
 
-  <div class="section amount-area">
-    <h2>בחר סכום או הזן ידנית</h2>
-
-    <div class="buttons-row">
-      <!-- אפשר לשנות/להוסיף ערכים בקלות -->
-      <button type="button" data-amount="50">50 ₪</button>
-      <button type="button" data-amount="100">100 ₪</button>
-      <button type="button" data-amount="150">150 ₪</button>
-      <button type="button" data-amount="200">200 ₪</button>
+    <div class="totals-container">
+      <div class="total-card">
+        <div class="total-label">מאור</div>
+        <div class="total-value" id="totalMaor">0 ₪</div>
+      </div>
+      <div class="total-card">
+        <div class="total-label">עידו</div>
+        <div class="total-value" id="totalIdo">0 ₪</div>
+      </div>
     </div>
 
-    <div style="margin-top:10px;">
-      <label>
-        סכום ידני (אפשר גם מינוס): 
-        <input type="number" id="manualAmount" step="1">
+    <span class="section-title">למי לעדכן?</span>
+    <div class="user-selector">
+      <label class="user-option">
+        <input type="radio" name="user" value="מאור">
+        <div class="user-card">מאור</div>
+      </label>
+      <label class="user-option">
+        <input type="radio" name="user" value="עידו">
+        <div class="user-card">עידו</div>
       </label>
     </div>
 
-    <button class="submit-btn" id="submitBtn">עדכן סכום</button>
+    <span class="section-title">בחירה מהירה</span>
+    <div class="quick-amounts">
+      <button type="button" class="amount-btn" data-amount="50">50</button>
+      <button type="button" class="amount-btn" data-amount="100">100</button>
+      <button type="button" class="amount-btn" data-amount="150">150</button>
+      <button type="button" class="amount-btn" data-amount="200">200</button>
+    </div>
 
+    <div class="input-group">
+      <div class="input-wrapper">
+        <input type="number" id="manualAmount" step="1" placeholder="סכום אחר (או מינוס להורדה)">
+      </div>
+    </div>
+
+    <div class="input-group">
+      <div class="input-wrapper">
+        <input type="text" id="note" placeholder="הערה">
+        <span class="optional-tag">אופציונלי</span>
+      </div>
+    </div>
+
+    <button class="submit-btn" id="submitBtn">עדכן יתרה</button>
     <div class="status" id="status"></div>
   </div>
 
-  <div class="section totals">
-    <h2>סיכום נוכחי</h2>
-    <div>סה"כ מאור: <span id="totalMaor">0</span> ₪</div>
-    <div>סה"כ עידו: <span id="totalIdo">0</span> ₪</div>
-  </div>
-
   <script>
-    // === חשוב ===
-    // כאן תדביק את ה-URL של ה-Web App של ה-Google Apps Script
-    const API_URL = 'https://script.google.com/macros/s/AKfycbylQdSflYvxCDrW-nhhcWeXTqnPK_gl3CH8VQ2g2ftrlg0xor7-tzwgGm12EJEIL_hGYQ/exec';
+    // ==========================================
+    // נא להדביק כאן את כתובת ה-Apps Script שלך
+    const API_URL = 'https://script.google.com/macros/s/AKfycbzF7IdCdT0joDICVwj7tP8rpFLRuLbyXs5dc6TsYYNy-xSWCYHYLbgzh8oHga3LvInTOw/exec';
+    // ==========================================
 
     const statusEl = document.getElementById('status');
     const totalMaorEl = document.getElementById('totalMaor');
     const totalIdoEl = document.getElementById('totalIdo');
     const manualAmountInput = document.getElementById('manualAmount');
+    const noteInput = document.getElementById('note');
     const submitBtn = document.getElementById('submitBtn');
 
-    // לחיצה על כפתור סכום קבוע - ממלאת את הקלט הידני
-    document.querySelectorAll('.buttons-row button').forEach(btn => {
+    const USER_STORAGE_KEY = 'selectedUserMaorIdo_V3';
+
+    function initUserSelection() {
+      const radios = document.querySelectorAll('input[name="user"]');
+      const savedUser = localStorage.getItem(USER_STORAGE_KEY);
+      let userToSelect = savedUser || 'מאור';
+      
+      const radioToCheck = Array.from(radios).find(r => r.value === userToSelect);
+      if (radioToCheck) radioToCheck.checked = true;
+
+      radios.forEach(radio => {
+        radio.addEventListener('change', () => {
+          if (radio.checked) {
+            localStorage.setItem(USER_STORAGE_KEY, radio.value);
+            statusEl.textContent = ''; 
+          }
+        });
+      });
+    }
+
+    document.querySelectorAll('.amount-btn').forEach(btn => {
       btn.addEventListener('click', () => {
-        const amount = btn.getAttribute('data-amount');
-        manualAmountInput.value = amount;
+        manualAmountInput.value = btn.getAttribute('data-amount');
+        manualAmountInput.focus();
       });
     });
 
-    // שליחת עדכון סכום
     submitBtn.addEventListener('click', async () => {
-      const user = document.querySelector('input[name="user"]:checked').value;
+      const userRadio = document.querySelector('input[name="user"]:checked');
+      const user = userRadio ? userRadio.value : null;
       const amountStr = manualAmountInput.value.trim();
+      const note = noteInput.value.trim();
+
+      statusEl.className = 'status';
+      statusEl.textContent = '';
+
+      if (!user) {
+        statusEl.textContent = 'יש לבחור משתמש';
+        statusEl.classList.add('error');
+        return;
+      }
 
       if (!amountStr) {
-        statusEl.textContent = 'אנא הזן סכום (אפשר גם מינוס).';
+        statusEl.textContent = 'יש להזין סכום';
+        statusEl.classList.add('error');
+        manualAmountInput.focus();
         return;
       }
 
       const amount = parseFloat(amountStr);
       if (isNaN(amount)) {
-        statusEl.textContent = 'הסכום אינו תקין.';
+        statusEl.textContent = 'הסכום אינו תקין';
+        statusEl.classList.add('error');
         return;
       }
 
-      statusEl.textContent = 'שולח עדכון...';
+      const originalBtnText = submitBtn.textContent;
+      submitBtn.innerHTML = 'מעדכן... <span class="spinner"></span>';
+      submitBtn.disabled = true;
 
       try {
-        const res = await fetch(API_URL, {
+        await fetch(API_URL, {
           method: 'POST',
-          mode: 'no-cors', // אם תגדיר CORS נכון, אפשר להסיר / לשנות
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ user, amount })
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ user, amount, note })
         });
 
-        // בגלל no-cors אי אפשר לקרוא תשובה,
-        // לכן אחרי POST נקרא שוב את totals עם GET
-        statusEl.textContent = 'העדכון נשלח, טוען סכומים...';
+        statusEl.textContent = 'עודכן בהצלחה!';
+        statusEl.classList.add('success');
+        
         manualAmountInput.value = '';
+        noteInput.value = '';
+        
         await loadTotals();
-        statusEl.textContent = 'הסכומים עודכנו בהצלחה ✔';
+
       } catch (err) {
         console.error(err);
-        statusEl.textContent = 'שגיאה בשליחת הנתונים.';
+        statusEl.textContent = 'שגיאה בתקשורת עם השרת';
+        statusEl.classList.add('error');
+      } finally {
+        submitBtn.innerHTML = originalBtnText;
+        submitBtn.disabled = false;
+        setTimeout(() => {
+            if(statusEl.classList.contains('success')) statusEl.textContent = '';
+        }, 3000);
       }
     });
 
-    // טעינת סיכומים נוכחיים מהשרת
     async function loadTotals() {
       try {
-        const res = await fetch(API_URL); // GET = doGet
+        const res = await fetch(API_URL);
         const data = await res.json();
         const totals = data.totals || {};
 
-        totalMaorEl.textContent = totals['מאור'] ?? 0;
-        totalIdoEl.textContent = totals['עידו'] ?? 0;
+        totalMaorEl.textContent = (totals['מאור'] || 0).toLocaleString() + ' ₪';
+        totalIdoEl.textContent = (totals['עידו'] || 0).toLocaleString() + ' ₪';
       } catch (err) {
-        console.error(err);
-        statusEl.textContent = 'שגיאה בטעינת הסיכומים.';
+        console.error("Error loading totals:", err);
       }
     }
 
-    // כשנטען העמוד - נטען סכומים ראשוניים
+    initUserSelection();
     loadTotals();
+
   </script>
 </body>
 </html>
-
