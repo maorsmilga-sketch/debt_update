@@ -1,233 +1,420 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>ניהול כספים - מאור ועידו</title>
-  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;700&display=swap" rel="stylesheet">
-  <style>
-    /* ה-CSS המקורי שלך ללא שינוי */
-    :root {
-      --primary-color: #059669; --primary-hover: #047857; --bg-color: #F3F4F6;
-      --card-bg: #ffffff; --text-main: #1F2937; --text-secondary: #6B7280;
-      --border-color: #E5E7EB; --success-color: #10B981; --error-color: #EF4444;
-      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    }
-    body { font-family: 'Rubik', sans-serif; background-color: var(--bg-color); color: var(--text-main); margin: 0; min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; }
-    .container { background: var(--card-bg); width: 100%; max-width: 450px; border-radius: 24px; box-shadow: var(--shadow); padding: 30px; position: relative; overflow: hidden; }
-    .corner-logo { position: absolute; top: 20px; width: 50px; opacity: 0.9; }
-    .logo-right { right: 20px; } .logo-left { left: 20px; }
-    h1 { text-align: center; font-size: 1.5rem; font-weight: 700; margin-top: 10px; margin-bottom: 25px; }
-    
-    /* תוספת: כפתור יצוא ראשי */
-    .export-main-btn { width: 100%; background: #4B5563; color: white; border: none; padding: 10px; border-radius: 12px; margin-bottom: 20px; cursor: pointer; font-family: inherit; font-weight: 500; transition: 0.2s; }
-    .export-main-btn:hover { background: #374151; }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>ניהול כספים - מאור, עידו ועסק</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;700&display=swap" rel="stylesheet">
 
-    .totals-container { display: flex; justify-content: space-between; gap: 10px; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid var(--border-color); }
-    .total-card { flex: 1; text-align: center; background: #F9FAFB; padding: 15px 10px; border-radius: 16px; border: 1px solid var(--border-color); position: relative; }
-    .total-label { font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 5px; }
-    .total-value { font-size: 1.2rem; font-weight: 700; color: var(--primary-color); min-height: 24px; margin-bottom: 8px; }
-    
-    /* תוספת: כפתור פירוט יומי קטן */
-    .detail-btn { background: #E5E7EB; border: none; padding: 4px 8px; border-radius: 6px; font-size: 0.7rem; cursor: pointer; color: var(--text-main); }
-    .detail-btn:hover { background: #D1D5DB; }
+  <style>
+    :root {
+      --primary-color: #059669; 
+      --primary-hover: #047857; 
+      --bg-color: #F3F4F6;
+      --card-bg: #ffffff;
+      --text-main: #1F2937;
+      --text-secondary: #6B7280;
+      --border-color: #E5E7EB;
+      --success-color: #10B981;
+      --error-color: #EF4444;
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
 
-    /* Modals CSS */
-    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center; }
-    .modal-content { background: white; width: 90%; max-width: 360px; border-radius: 20px; padding: 25px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
-    .modal-header { font-weight: 700; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px; text-align: center; }
-    .detail-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dotted #eee; font-size: 0.9rem; }
-    .total-line { font-weight: 700; color: var(--primary-color); margin-top: 15px; text-align: center; }
-    .close-modal { width: 100%; margin-top: 20px; padding: 12px; border: none; border-radius: 10px; cursor: pointer; font-weight: 600; font-family: inherit; }
+    body {
+      font-family: 'Rubik', sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
 
-    /* עיצוב הטפסים המקורי שלך */
-    .section-title { font-size: 0.95rem; font-weight: 500; color: var(--text-secondary); margin-bottom: 10px; display: block; }
-    .user-selector { display: flex; gap: 10px; margin-bottom: 25px; }
-    .user-option { flex: 1; position: relative; }
-    .user-option input { position: absolute; opacity: 0; width: 0; }
-    .user-card { display: flex; align-items: center; justify-content: center; padding: 12px; border: 2px solid var(--border-color); border-radius: 12px; cursor: pointer; font-weight: 500; transition: 0.2s; }
-    .user-option input:checked + .user-card { border-color: var(--primary-color); background-color: #ECFDF5; color: var(--primary-color); font-weight: 700; }
-    .quick-amounts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 20px; }
-    .amount-btn { background: #fff; border: 1px solid var(--border-color); padding: 12px 0; border-radius: 10px; cursor: pointer; transition: 0.2s; font-family: inherit; }
-    .input-wrapper input { width: 100%; padding: 14px 15px; border: 1px solid var(--border-color); border-radius: 12px; font-size: 1rem; box-sizing: border-box; background: #F9FAFB; margin-bottom: 15px; font-family: inherit; }
-    .submit-btn { width: 100%; padding: 16px; background: var(--primary-color); color: white; border: none; border-radius: 14px; font-size: 1.1rem; font-weight: 600; cursor: pointer; box-shadow: 0 4px 6px rgba(5, 150, 105, 0.3); font-family: inherit; }
-    .submit-btn:disabled { background: #9CA3AF; }
-    .status { margin-top: 15px; text-align: center; font-size: 0.9rem; min-height: 20px; }
-    .skeleton { background: linear-gradient(90deg, #e0e0e0 25%, #f0f0f0 50%, #e0e0e0 75%); background-size: 200% 100%; animation: loading 1.5s infinite; border-radius: 4px; width: 70%; height: 20px; display: inline-block; }
-    @keyframes loading { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .spinner { display: inline-block; width: 12px; height: 12px; border: 2px solid rgba(255,255,255,0.3); border-radius: 50%; border-top-color: #fff; animation: spin 1s linear infinite; margin-right: 8px; }
-  </style>
+    .container {
+      background: var(--card-bg);
+      width: 100%;
+      max-width: 450px;
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      padding: 30px;
+      overflow: hidden;
+      position: relative; 
+    }
+
+    /* לוגואים */
+    .corner-logo {
+      position: absolute;
+      top: 20px;
+      width: 50px;
+      height: auto;
+      opacity: 0.9;
+    }
+    .logo-right { right: 20px; }
+    .logo-left { left: 20px; }
+
+    @media (max-width: 400px) {
+      .corner-logo { width: 40px; top: 15px; }
+      .logo-right { right: 15px; }
+      .logo-left { left: 15px; }
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-top: 10px;
+      margin-bottom: 25px;
+    }
+
+    /* --- סיכומים וטעינה --- */
+    .totals-container {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .total-card {
+      flex: 1;
+      text-align: center;
+      background: #F9FAFB;
+      padding: 10px;
+      border-radius: 16px;
+      border: 1px solid var(--border-color);
+      min-width: 0;
+      position: relative;
+    }
+
+    .total-label {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      margin-bottom: 5px;
+      white-space: nowrap;
+    }
+
+    .total-value {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--primary-color);
+      min-height: 24px; /* שומר מקום לתוכן */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* --- Skeleton Loader Animation (אנימציית שלד) --- */
+    .skeleton {
+      background: linear-gradient(90deg, #e0e0e0 25%, #f0f0f0 50%, #e0e0e0 75%);
+      background-size: 200% 100%;
+      animation: loading 1.5s infinite;
+      border-radius: 4px;
+      width: 70%;
+      height: 20px;
+      display: inline-block;
+    }
+
+    @keyframes loading {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    /* אייקון טעינה קטן כשמרעננים מידע קיים */
+    .refresh-spinner {
+      width: 12px;
+      height: 12px;
+      border: 2px solid #ccc;
+      border-top-color: var(--primary-color);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      position: absolute;
+      top: 5px;
+      left: 5px;
+      display: none; /* מוסתר כברירת מחדל */
+    }
+    .refreshing .refresh-spinner { display: block; }
+
+
+    /* --- שאר העיצוב (ללא שינוי) --- */
+    .section-title {
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      margin-bottom: 10px;
+      display: block;
+    }
+    .user-selector { display: flex; gap: 10px; margin-bottom: 25px; }
+    .user-option { flex: 1; position: relative; }
+    .user-option input[type="radio"] { position: absolute; opacity: 0; cursor: pointer; height: 0; width: 0; }
+    .user-card {
+      display: flex; align-items: center; justify-content: center;
+      padding: 12px 5px; background: #fff; border: 2px solid var(--border-color);
+      border-radius: 12px; cursor: pointer; font-weight: 500; font-size: 0.95rem;
+      transition: all 0.2s ease; color: var(--text-secondary); white-space: nowrap;
+    }
+    .user-option input[type="radio"]:checked + .user-card {
+      border-color: var(--primary-color); background-color: #ECFDF5;
+      color: var(--primary-color); font-weight: 700; box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.2); 
+    }
+    .quick-amounts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 20px; }
+    .amount-btn {
+      background: #fff; border: 1px solid var(--border-color); color: var(--text-main);
+      padding: 12px 0; border-radius: 10px; font-weight: 500; cursor: pointer; transition: all 0.2s;
+      font-family: 'Rubik', sans-serif;
+    }
+    .amount-btn:hover { background-color: #F3F4F6; border-color: #D1D5DB; }
+    .amount-btn:active { transform: scale(0.95); background-color: var(--primary-color); color: white; border-color: var(--primary-color); }
+    .input-group { margin-bottom: 15px; }
+    .input-wrapper { position: relative; }
+    .input-wrapper input {
+      width: 100%; padding: 14px 15px; border: 1px solid var(--border-color);
+      border-radius: 12px; font-size: 1rem; font-family: 'Rubik', sans-serif;
+      box-sizing: border-box; transition: border-color 0.2s; background: #F9FAFB;
+    }
+    .input-wrapper input:focus { outline: none; border-color: var(--primary-color); background: #fff; box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1); }
+    .optional-tag { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); font-size: 0.8rem; color: #9CA3AF; pointer-events: none; }
+    .submit-btn {
+      width: 100%; padding: 16px; background-color: var(--primary-color); color: white;
+      border: none; border-radius: 14px; font-size: 1.1rem; font-weight: 600; cursor: pointer;
+      transition: background-color 0.2s, transform 0.1s; font-family: 'Rubik', sans-serif;
+      margin-top: 10px; box-shadow: 0 4px 6px rgba(5, 150, 105, 0.3); 
+    }
+    .submit-btn:hover { background-color: var(--primary-hover); transform: translateY(-1px); }
+    .submit-btn:active { transform: translateY(1px); }
+    .submit-btn:disabled { background-color: #9CA3AF; cursor: not-allowed; transform: none; box-shadow: none; }
+    .status { margin-top: 15px; text-align: center; font-size: 0.9rem; min-height: 20px; font-weight: 500; }
+    .status.error { color: var(--error-color); }
+    .status.success { color: var(--success-color); }
+    .spinner { display: inline-block; width: 12px; height: 12px; border: 2px solid rgba(255,255,255,0.3); border-radius: 50%; border-top-color: #fff; animation: spin 1s ease-in-out infinite; margin-left: 8px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
 </head>
 <body>
 
-  <div class="container">
-    <img src="logo1.png" alt="Logo" class="corner-logo logo-right">
-    <img src="logo1.png" alt="Logo" class="corner-logo logo-left">
-    
-    <h1>ניהול כספים</h1>
+  <div class="container">
+    <img src="logo1.png" alt="לוגו עץ" class="corner-logo logo-right">
+    <img src="logo1.png" alt="לוגו עץ" class="corner-logo logo-left">
+    
+    <h1>ניהול כספים</h1>
 
-    <button class="export-main-btn" onclick="openExportModal()">📥 ייצוא נתונים לאקסל</button>
+    <div class="totals-container">
+      <div class="total-card" id="cardMaor">
+        <div class="refresh-spinner"></div>
+        <div class="total-label">מאור</div>
+        <div class="total-value" id="totalMaor"><span class="skeleton"></span></div>
+      </div>
+      <div class="total-card" id="cardIdo">
+        <div class="refresh-spinner"></div>
+        <div class="total-label">עידו</div>
+        <div class="total-value" id="totalIdo"><span class="skeleton"></span></div>
+      </div>
+      <div class="total-card" id="cardBusiness">
+        <div class="refresh-spinner"></div>
+        <div class="total-label">עסק</div>
+        <div class="total-value" id="totalBusiness"><span class="skeleton"></span></div>
+      </div>
+    </div>
 
-    <div class="totals-container">
-      <div class="total-card" id="cardMaor">
-        <div class="total-label">מאור</div>
-        <div class="total-value" id="totalMaor"><span class="skeleton"></span></div>
-        <button class="detail-btn" onclick="showDailyDetails('מאור')">פירוט יומי</button>
-      </div>
-      <div class="total-card" id="cardIdo">
-        <div class="total-label">עידו</div>
-        <div class="total-value" id="totalIdo"><span class="skeleton"></span></div>
-        <button class="detail-btn" onclick="showDailyDetails('עידו')">פירוט יומי</button>
-      </div>
-    </div>
+    <span class="section-title">למי לעדכן?</span>
+    <div class="user-selector">
+      <label class="user-option">
+        <input type="radio" name="user" value="מאור">
+        <div class="user-card">מאור</div>
+      </label>
+      <label class="user-option">
+        <input type="radio" name="user" value="עידו">
+        <div class="user-card">עידו</div>
+      </label>
+      <label class="user-option">
+        <input type="radio" name="user" value="עסק">
+        <div class="user-card">עסק</div>
+      </label>
+    </div>
 
-    <span class="section-title">למי לעדכן?</span>
-    <div class="user-selector">
-      <label class="user-option"><input type="radio" name="user" value="מאור" checked><div class="user-card">מאור</div></label>
-      <label class="user-option"><input type="radio" name="user" value="עידו"><div class="user-card">עידו</div></label>
-    </div>
+    <span class="section-title">בחירה מהירה</span>
+    <div class="quick-amounts">
+      <button type="button" class="amount-btn" data-amount="50">50</button>
+      <button type="button" class="amount-btn" data-amount="100">100</button>
+      <button type="button" class="amount-btn" data-amount="150">150</button>
+      <button type="button" class="amount-btn" data-amount="200">200</button>
+    </div>
 
-    <span class="section-title">בחירה מהירה</span>
-    <div class="quick-amounts">
-      <button type="button" class="amount-btn" onclick="setAmt(50)">50</button>
-      <button type="button" class="amount-btn" onclick="setAmt(100)">100</button>
-      <button type="button" class="amount-btn" onclick="setAmt(150)">150</button>
-      <button type="button" class="amount-btn" onclick="setAmt(200)">200</button>
-    </div>
+    <div class="input-group">
+      <div class="input-wrapper">
+        <input type="number" id="manualAmount" step="1" placeholder="סכום אחר (או מינוס להורדה)">
+      </div>
+    </div>
 
-    <input type="number" id="manualAmount" placeholder="סכום אחר">
-    <input type="text" id="note" placeholder="הערה (אופציונלי)">
+    <div class="input-group">
+      <div class="input-wrapper">
+        <input type="text" id="note" placeholder="הערה">
+        <span class="optional-tag">אופציונלי</span>
+      </div>
+    </div>
 
-    <button class="submit-btn" id="submitBtn" onclick="sendData()">עדכן יתרה</button>
-    <div class="status" id="status"></div>
-  </div>
+    <button class="submit-btn" id="submitBtn">עדכן יתרה</button>
+    <div class="status" id="status"></div>
+  </div>
 
-  <div id="detailModal" class="modal">
-    <div class="modal-content">
-      <div class="modal-header" id="modalTitle">פירוט עסקאות</div>
-      <div id="modalBody" style="max-height: 250px; overflow-y: auto;"></div>
-      <div class="total-line" id="modalTotal"></div>
-      <button class="close-modal" onclick="closeModal('detailModal')" style="background:#eee;">סגור</button>
-    </div>
-  </div>
+  <script>
+    // ==========================================
+    const API_URL = 'https://script.google.com/macros/s/AKfycbxt7VJkVGDiZ8BNyL4Oa0aGhPjV56iUtILDyTDrESe5h9wGY4nVj6yvOoTBbDLHbycb2g/exec';
+    // ==========================================
 
-  <div id="exportModal" class="modal">
-    <div class="modal-content">
-      <div class="modal-header">הגדרות ייצוא לאקסל</div>
-      <div style="display:flex; flex-direction:column; gap:10px;">
-        <label style="font-size:0.85rem;">בחר שחקן:</label>
-        <select id="exportUser" style="padding:10px; border-radius:8px; border:1px solid #ccc;">
-          <option value="שניהם">שניהם</option>
-          <option value="מאור">מאור</option>
-          <option value="עידו">עידו</option>
-        </select>
-        <label style="font-size:0.85rem;">מחודש:</label>
-        <input type="month" id="startMonth" style="padding:10px; border-radius:8px; border:1px solid #ccc;">
-        <label style="font-size:0.85rem;">עד חודש:</label>
-        <input type="month" id="endMonth" style="padding:10px; border-radius:8px; border:1px solid #ccc;">
-      </div>
-      <button class="close-modal" id="downloadBtn" onclick="runExport()" style="background:var(--primary-color); color:white;">הורד קובץ</button>
-      <button class="close-modal" onclick="closeModal('exportModal')" style="background:#eee; margin-top:5px;">ביטול</button>
-    </div>
-  </div>
+    const statusEl = document.getElementById('status');
+    const totalMaorEl = document.getElementById('totalMaor');
+    const totalIdoEl = document.getElementById('totalIdo');
+    const totalBusinessEl = document.getElementById('totalBusiness');
+    const manualAmountInput = document.getElementById('manualAmount');
+    const noteInput = document.getElementById('note');
+    const submitBtn = document.getElementById('submitBtn');
 
-  <script>
-    const API_URL = 'https://script.google.com/macros/s/AKfycbyk7vecQ3v0SwrsG1DkSaMQg3owGcSvtRe72ScbaH2ErO8FOtllPuDtAy2bRaMZjpUd1g/exec';
+    // מפתחות לזכרון מקומי
+    const USER_STORAGE_KEY = 'selectedUserMaorIdoBusiness_V1';
+    const TOTALS_CACHE_KEY = 'cachedTotals_V1';
 
-    function setAmt(val) { document.getElementById('manualAmount').value = val; }
-    function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-    function openExportModal() { document.getElementById('exportModal').style.display = 'flex'; }
+    function initUserSelection() {
+      const radios = document.querySelectorAll('input[name="user"]');
+      const savedUser = localStorage.getItem(USER_STORAGE_KEY);
+      let userToSelect = savedUser || 'מאור';
+      
+      const radioToCheck = Array.from(radios).find(r => r.value === userToSelect);
+      if (radioToCheck) radioToCheck.checked = true;
 
-    // טעינת יתרות ראשונית
-    async function loadTotals() {
-      try {
-        const res = await fetch(API_URL);
-        const data = await res.json();
-        document.getElementById('totalMaor').innerText = (data.totals['מאור'] || 0).toLocaleString() + ' ₪';
-        document.getElementById('totalIdo').innerText = (data.totals['עידו'] || 0).toLocaleString() + ' ₪';
-      } catch (e) { console.error(e); }
-    }
+      radios.forEach(radio => {
+        radio.addEventListener('change', () => {
+          if (radio.checked) {
+            localStorage.setItem(USER_STORAGE_KEY, radio.value);
+            statusEl.textContent = ''; 
+          }
+        });
+      });
+    }
 
-    // עדכון יתרה
-    async function sendData() {
-      const user = document.querySelector('input[name="user"]:checked').value;
-      const amount = document.getElementById('manualAmount').value;
-      const note = document.getElementById('note').value;
-      const btn = document.getElementById('submitBtn');
+    document.querySelectorAll('.amount-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        manualAmountInput.value = btn.getAttribute('data-amount');
+        manualAmountInput.focus();
+      });
+    });
 
-      if (!amount) return alert("יש להזין סכום");
-      
-      btn.disabled = true;
-      btn.innerHTML = 'מעדכן... <span class="spinner"></span>';
+    submitBtn.addEventListener('click', async () => {
+      const userRadio = document.querySelector('input[name="user"]:checked');
+      const user = userRadio ? userRadio.value : null;
+      const amountStr = manualAmountInput.value.trim();
+      const note = noteInput.value.trim();
 
-      try {
-        await fetch(API_URL, {
-          method: 'POST',
-          mode: 'no-cors',
-          body: JSON.stringify({ user, amount, note })
-        });
-        document.getElementById('manualAmount').value = '';
-        document.getElementById('note').value = '';
-        document.getElementById('status').innerText = 'עודכן בהצלחה!';
-        document.getElementById('status').className = 'status success';
-        setTimeout(() => document.getElementById('status').innerText = '', 3000);
-        await loadTotals();
-      } catch (e) { alert("שגיאה בעדכון"); }
-      btn.disabled = false;
-      btn.innerText = 'עדכן יתרה';
-    }
+      statusEl.className = 'status';
+      statusEl.textContent = '';
 
-    // פירוט יומי
-    async function showDailyDetails(user) {
-      const modal = document.getElementById('detailModal');
-      const body = document.getElementById('modalBody');
-      const title = document.getElementById('modalTitle');
-      const totalDiv = document.getElementById('modalTotal');
+      if (!user) {
+        statusEl.textContent = 'יש לבחור למי לעדכן';
+        statusEl.classList.add('error');
+        return;
+      }
 
-      body.innerHTML = "טוען נתונים...";
-      modal.style.display = "flex";
+      if (!amountStr) {
+        statusEl.textContent = 'יש להזין סכום';
+        statusEl.classList.add('error');
+        manualAmountInput.focus();
+        return;
+      }
 
-      try {
-        const res = await fetch(`${API_URL}?action=getDetails&user=${user}`);
-        const data = await res.json();
-        title.innerText = `פירוט יומי - ${user}`;
-        body.innerHTML = data.details.items.length > 0 
-          ? data.details.items.map(i => `<div class="detail-row"><span>${i.note}</span><span style="font-weight:700;">${i.amount.toLocaleString()} ₪</span></div>`).join('')
-          : "אין עסקאות להיום";
-        totalDiv.innerText = `סה"כ להיום: ${data.details.total.toLocaleString()} ₪`;
-      } catch (e) { body.innerHTML = "שגיאה בטעינה"; }
-    }
+      const amount = parseFloat(amountStr);
+      if (isNaN(amount)) {
+        statusEl.textContent = 'הסכום אינו תקין';
+        statusEl.classList.add('error');
+        return;
+      }
 
-    // ייצוא לאקסל
-    async function runExport() {
-      const user = document.getElementById('exportUser').value;
-      const start = document.getElementById('startMonth').value;
-      const end = document.getElementById('endMonth').value;
-      const btn = document.getElementById('downloadBtn');
+      const originalBtnText = submitBtn.textContent;
+      submitBtn.innerHTML = 'מעדכן... <span class="spinner"></span>';
+      submitBtn.disabled = true;
 
-      btn.innerText = "מעבד...";
-      btn.disabled = true;
+      try {
+        await fetch(API_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ user, amount, note })
+        });
 
-      try {
-        const res = await fetch(`${API_URL}?action=export&user=${encodeURIComponent(user)}&startMonth=${start}&endMonth=${end}`);
-        const json = await res.json();
+        statusEl.textContent = 'עודכן בהצלחה!';
+        statusEl.classList.add('success');
+        manualAmountInput.value = '';
+        noteInput.value = '';
+        
+        // לאחר עדכון, נטען שוב מהשרת
+        await loadTotals(true);
 
-        if (json.data && json.data.length > 0) {
-          let csv = "\uFEFFתאריך,שם,סכום,הערה\n" + json.data.map(r => `${r.date},${r.user},${r.amount},"${r.note}"`).join("\n");
-          const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-          const link = document.createElement("a");
-          link.href = URL.createObjectURL(blob);
-          link.download = `דוח_${user}_${new Date().toLocaleDateString()}.csv`;
-          link.click();
-          closeModal('exportModal');
-        } else { alert("לא נמצאו נתונים"); }
-      } catch (e) { alert("שגיאה בייצוא"); }
-      btn.innerText = "הורד קובץ";
-      btn.disabled = false;
-    }
+      } catch (err) {
+        console.error(err);
+        statusEl.textContent = 'שגיאה בתקשורת עם השרת';
+        statusEl.classList.add('error');
+      } finally {
+        submitBtn.innerHTML = originalBtnText;
+        submitBtn.disabled = false;
+        setTimeout(() => {
+            if(statusEl.classList.contains('success')) statusEl.textContent = '';
+        }, 3000);
+      }
+    });
 
-    loadTotals();
-  </script>
+    // פונקציה שמציגה נתונים על המסך
+    function renderTotals(totals) {
+      if (!totals) return;
+      totalMaorEl.innerHTML = (totals['מאור'] || 0).toLocaleString() + ' ₪';
+      totalIdoEl.innerHTML = (totals['עידו'] || 0).toLocaleString() + ' ₪';
+      totalBusinessEl.innerHTML = (totals['עסק'] || 0).toLocaleString() + ' ₪';
+    }
+
+    // פונקציית הטעינה החכמה
+    async function loadTotals(forceRefresh = false) {
+      
+      // 1. נסה לטעון מהזיכרון המקומי קודם כל (לתצוגה מיידית)
+      const cachedData = localStorage.getItem(TOTALS_CACHE_KEY);
+      
+      if (cachedData && !forceRefresh) {
+        // מציגים את המידע הישן מיד
+        renderTotals(JSON.parse(cachedData));
+        // מוסיפים אינדיקציה שאנחנו מרעננים ברקע (spinner קטן בצד)
+        document.querySelectorAll('.total-card').forEach(el => el.classList.add('refreshing'));
+      }
+
+      try {
+        // 2. מבצעים את הבקשה האמיתית לשרת
+        const res = await fetch(API_URL);
+        const data = await res.json();
+        const totals = data.totals || {};
+
+        // 3. שומרים את המידע החדש בזיכרון המקומי לפעם הבאה
+        localStorage.setItem(TOTALS_CACHE_KEY, JSON.stringify(totals));
+
+        // 4. מעדכנים את המסך עם המידע המעודכן ביותר
+        renderTotals(totals);
+
+      } catch (err) {
+        console.error("Error loading totals:", err);
+        // אם הייתה שגיאה ואין לנו כלום בזיכרון, נשאיר את אנימציית הטעינה או נציג שגיאה
+        if (!cachedData) {
+            totalMaorEl.innerHTML = '-';
+            totalIdoEl.innerHTML = '-';
+            totalBusinessEl.innerHTML = '-';
+        }
+      } finally {
+        // מסירים את הספינר הקטן של הרענון
+        document.querySelectorAll('.total-card').forEach(el => el.classList.remove('refreshing'));
+      }
+    }
+
+    initUserSelection();
+    loadTotals();
+
+  </script>
 </body>
 </html>
