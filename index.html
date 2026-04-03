@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>ניהול כספים - מאור, עידו ועסק</title>
+  <title>ניהול כספים - מאור ועידו</title>
   
   <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;700&display=swap" rel="stylesheet">
 
@@ -192,6 +192,204 @@
     .status.success { color: var(--success-color); }
     .spinner { display: inline-block; width: 12px; height: 12px; border: 2px solid rgba(255,255,255,0.3); border-radius: 50%; border-top-color: #fff; animation: spin 1s ease-in-out infinite; margin-left: 8px; }
     @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* --- Player Management Section --- */
+    .players-section {
+      margin-top: 30px;
+      padding-top: 25px;
+      border-top: 2px solid var(--border-color);
+    }
+    .players-section-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 18px;
+      text-align: center;
+    }
+    .add-player-form {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .add-player-form input {
+      flex: 1;
+      padding: 12px 15px;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      font-size: 0.95rem;
+      font-family: 'Rubik', sans-serif;
+      background: #F9FAFB;
+      box-sizing: border-box;
+      transition: border-color 0.2s;
+    }
+    .add-player-form input:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      background: #fff;
+      box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1);
+    }
+    .add-player-form button {
+      padding: 12px 20px;
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      font-family: 'Rubik', sans-serif;
+      white-space: nowrap;
+      transition: background-color 0.2s;
+    }
+    .add-player-form button:hover { background-color: var(--primary-hover); }
+    .add-player-form button:disabled { background-color: #9CA3AF; cursor: not-allowed; }
+
+    .player-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .player-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: #F9FAFB;
+      padding: 14px 16px;
+      border-radius: 14px;
+      border: 1px solid var(--border-color);
+      transition: border-color 0.2s;
+    }
+    .player-row:hover { border-color: #D1D5DB; }
+    .player-name {
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: var(--text-main);
+      min-width: 60px;
+    }
+    .player-stat {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 55px;
+    }
+    .player-stat-label {
+      font-size: 0.7rem;
+      color: var(--text-secondary);
+      margin-bottom: 2px;
+    }
+    .player-stat-value {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--primary-color);
+    }
+    .player-row-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-right: auto;
+      flex-wrap: wrap;
+    }
+    .player-action-btn {
+      padding: 8px 16px;
+      background: #fff;
+      border: 1.5px solid var(--primary-color);
+      color: var(--primary-color);
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+      font-family: 'Rubik', sans-serif;
+      transition: all 0.2s;
+    }
+    .player-action-btn:hover {
+      background: var(--primary-color);
+      color: white;
+    }
+    .player-delete-btn {
+      padding: 8px 14px;
+      background: #fff;
+      border: 1.5px solid var(--error-color);
+      color: var(--error-color);
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+      font-family: 'Rubik', sans-serif;
+      transition: all 0.2s;
+    }
+    .player-delete-btn:hover {
+      background: var(--error-color);
+      color: white;
+    }
+    .player-delete-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+    .player-update-form {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      margin-right: auto;
+      flex-wrap: wrap;
+    }
+    .player-update-form input {
+      width: 70px;
+      padding: 8px 10px;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-family: 'Rubik', sans-serif;
+      text-align: center;
+      box-sizing: border-box;
+    }
+    .player-update-form input:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.1);
+    }
+    .player-update-form .input-label {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+    }
+    .player-update-form button {
+      padding: 8px 14px;
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.8rem;
+      cursor: pointer;
+      font-family: 'Rubik', sans-serif;
+      transition: background-color 0.2s;
+    }
+    .player-update-form button:hover { background-color: var(--primary-hover); }
+    .player-update-form .cancel-btn {
+      background: #EF4444;
+    }
+    .player-update-form .cancel-btn:hover { background: #DC2626; }
+    .player-list .skeleton-row {
+      height: 52px;
+      background: linear-gradient(90deg, #e0e0e0 25%, #f0f0f0 50%, #e0e0e0 75%);
+      background-size: 200% 100%;
+      animation: loading 1.5s infinite;
+      border-radius: 14px;
+    }
+    .players-status {
+      text-align: center;
+      font-size: 0.85rem;
+      min-height: 18px;
+      font-weight: 500;
+      margin-top: 10px;
+    }
+    .players-status.error { color: var(--error-color); }
+    .players-status.success { color: var(--success-color); }
+    .player-empty {
+      text-align: center;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      padding: 20px 0;
+    }
   </style>
 </head>
 <body>
@@ -213,11 +411,6 @@
         <div class="total-label">עידו</div>
         <div class="total-value" id="totalIdo"><span class="skeleton"></span></div>
       </div>
-      <div class="total-card" id="cardBusiness">
-        <div class="refresh-spinner"></div>
-        <div class="total-label">עסק</div>
-        <div class="total-value" id="totalBusiness"><span class="skeleton"></span></div>
-      </div>
     </div>
 
     <span class="section-title">למי לעדכן?</span>
@@ -229,10 +422,6 @@
       <label class="user-option">
         <input type="radio" name="user" value="עידו">
         <div class="user-card">עידו</div>
-      </label>
-      <label class="user-option">
-        <input type="radio" name="user" value="עסק">
-        <div class="user-card">עסק</div>
       </label>
     </div>
 
@@ -259,24 +448,42 @@
 
     <button class="submit-btn" id="submitBtn">עדכן יתרה</button>
     <div class="status" id="status"></div>
+
+    <!-- Player Management Section -->
+    <div class="players-section">
+      <div class="players-section-title">ניהול שחקנים</div>
+      <div class="add-player-form">
+        <input type="text" id="newPlayerName" placeholder="שם שחקן חדש">
+        <button type="button" id="addPlayerBtn">הוסף שחקן</button>
+      </div>
+      <div class="player-list" id="playerList">
+        <div class="skeleton-row"></div>
+        <div class="skeleton-row"></div>
+        <div class="skeleton-row"></div>
+      </div>
+      <div class="players-status" id="playersStatus"></div>
+    </div>
   </div>
 
   <script>
     // ==========================================
-    const API_URL = 'https://script.google.com/macros/s/AKfycbxJfXHUKkomk7X87dxIlpwNUBMSERefcG3D5soQgzcUCHWU4ugPkuXESD8fPby8I0Urdw/exec';
+    const API_URL = 'https://script.google.com/macros/s/AKfycbzPr309QGJevk8eg9uCUiOy9C99fZM5xWmMkFZKNfHybInaCMDJXuNp0Zd2mi4RUECF8A/exec';
     // ==========================================
 
     const statusEl = document.getElementById('status');
     const totalMaorEl = document.getElementById('totalMaor');
     const totalIdoEl = document.getElementById('totalIdo');
-    const totalBusinessEl = document.getElementById('totalBusiness');
     const manualAmountInput = document.getElementById('manualAmount');
     const noteInput = document.getElementById('note');
     const submitBtn = document.getElementById('submitBtn');
+    const playerListEl = document.getElementById('playerList');
+    const playersStatusEl = document.getElementById('playersStatus');
+    const newPlayerNameInput = document.getElementById('newPlayerName');
+    const addPlayerBtn = document.getElementById('addPlayerBtn');
 
-    // מפתחות לזכרון מקומי
-    const USER_STORAGE_KEY = 'selectedUserMaorIdoBusiness_V1';
-    const TOTALS_CACHE_KEY = 'cachedTotals_V1';
+    const USER_STORAGE_KEY = 'selectedUserMaorIdo_V2';
+    const TOTALS_CACHE_KEY = 'cachedTotals_V2';
+    const PLAYERS_CACHE_KEY = 'cachedPlayers_V1';
 
     function initUserSelection() {
       const radios = document.querySelectorAll('input[name="user"]');
@@ -370,7 +577,6 @@
       if (!totals) return;
       totalMaorEl.innerHTML = (totals['מאור'] || 0).toLocaleString() + ' ₪';
       totalIdoEl.innerHTML = (totals['עידו'] || 0).toLocaleString() + ' ₪';
-      totalBusinessEl.innerHTML = (totals['עסק'] || 0).toLocaleString() + ' ₪';
     }
 
     // פונקציית הטעינה החכמה
@@ -404,7 +610,6 @@
         if (!cachedData) {
             totalMaorEl.innerHTML = '-';
             totalIdoEl.innerHTML = '-';
-            totalBusinessEl.innerHTML = '-';
         }
       } finally {
         // מסירים את הספינר הקטן של הרענון
@@ -412,8 +617,237 @@
       }
     }
 
+    // ==========================================
+    // Player Management
+    // ==========================================
+
+    let openUpdateRow = null; // tracks which player has the update form open
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    function jsStringLiteral(str) {
+      return String(str).replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+    }
+
+    function renderPlayers(players) {
+      if (!players || players.length === 0) {
+        playerListEl.innerHTML = '<div class="player-empty">אין שחקנים עדיין. הוסף שחקן חדש למעלה.</div>';
+        return;
+      }
+      playerListEl.innerHTML = players.map(p => {
+        const safeName = escapeHtml(p.name);
+        const jsName = jsStringLiteral(p.name);
+        const dataPlayer = encodeURIComponent(p.name);
+        return `
+        <div class="player-row" data-player="${dataPlayer}">
+          <div class="player-name">${safeName}</div>
+          <div class="player-stat">
+            <span class="player-stat-label">כמות</span>
+            <span class="player-stat-value">${(p.count || 0).toLocaleString()}</span>
+          </div>
+          <div class="player-stat">
+            <span class="player-stat-label">סכום</span>
+            <span class="player-stat-value">${(p.amount || 0).toLocaleString()} ₪</span>
+          </div>
+          <div class="player-row-actions">
+            <button type="button" class="player-action-btn player-update-trigger" onclick="toggleUpdateForm(this, '${jsName}')">עדכן</button>
+            <button type="button" class="player-delete-btn" onclick="deletePlayer('${jsName}', this)">מחק</button>
+          </div>
+        </div>`;
+      }).join('');
+    }
+
+    function toggleUpdateForm(btn, playerName) {
+      const row = btn.closest('.player-row');
+
+      if (openUpdateRow === playerName) {
+        const form = row.querySelector('.player-update-form');
+        if (form) form.remove();
+        btn.style.display = '';
+        openUpdateRow = null;
+        return;
+      }
+
+      // close any previously open form
+      if (openUpdateRow) {
+        const prevRow = Array.from(playerListEl.querySelectorAll('.player-row')).find(
+          r => decodeURIComponent(r.getAttribute('data-player') || '') === openUpdateRow
+        );
+        if (prevRow) {
+          const prevForm = prevRow.querySelector('.player-update-form');
+          if (prevForm) prevForm.remove();
+          const prevBtn = prevRow.querySelector('.player-update-trigger');
+          if (prevBtn) prevBtn.style.display = '';
+        }
+      }
+
+      btn.style.display = 'none';
+      openUpdateRow = playerName;
+
+      const form = document.createElement('div');
+      form.className = 'player-update-form';
+      form.innerHTML = `
+        <span class="input-label">כמות</span>
+        <input type="number" class="update-count" value="1" min="0">
+        <span class="input-label">סכום</span>
+        <input type="number" class="update-amount" placeholder="0">
+        <button type="button" onclick="submitPlayerUpdate('${playerName.replace(/'/g, "\\'")}', this)">שמור</button>
+        <button type="button" class="cancel-btn" onclick="toggleUpdateForm(this.closest('.player-row').querySelector('.player-update-trigger'), '${playerName.replace(/'/g, "\\'")}')">ביטול</button>
+      `;
+      row.appendChild(form);
+      form.querySelector('.update-amount').focus();
+    }
+
+    async function loadPlayers(forceRefresh = false) {
+      const cached = localStorage.getItem(PLAYERS_CACHE_KEY);
+
+      if (cached && !forceRefresh) {
+        renderPlayers(JSON.parse(cached));
+      }
+
+      try {
+        const res = await fetch(API_URL + '?action=getPlayers');
+        const data = await res.json();
+        const players = data.players || [];
+        localStorage.setItem(PLAYERS_CACHE_KEY, JSON.stringify(players));
+        renderPlayers(players);
+      } catch (err) {
+        console.error('Error loading players:', err);
+        if (!cached) {
+          playerListEl.innerHTML = '<div class="player-empty">שגיאה בטעינת שחקנים</div>';
+        }
+      }
+    }
+
+    addPlayerBtn.addEventListener('click', async () => {
+      const name = newPlayerNameInput.value.trim();
+      playersStatusEl.className = 'players-status';
+      playersStatusEl.textContent = '';
+
+      if (!name) {
+        playersStatusEl.textContent = 'יש להזין שם שחקן';
+        playersStatusEl.classList.add('error');
+        newPlayerNameInput.focus();
+        return;
+      }
+
+      addPlayerBtn.disabled = true;
+      addPlayerBtn.textContent = 'מוסיף...';
+
+      try {
+        await fetch(API_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'addPlayer', name })
+        });
+
+        playersStatusEl.textContent = `${name} נוסף בהצלחה!`;
+        playersStatusEl.classList.add('success');
+        newPlayerNameInput.value = '';
+
+        // Wait briefly for the server to process, then reload
+        setTimeout(() => loadPlayers(true), 1500);
+      } catch (err) {
+        console.error(err);
+        playersStatusEl.textContent = 'שגיאה בהוספת שחקן';
+        playersStatusEl.classList.add('error');
+      } finally {
+        addPlayerBtn.disabled = false;
+        addPlayerBtn.textContent = 'הוסף שחקן';
+        setTimeout(() => {
+          if (playersStatusEl.classList.contains('success')) playersStatusEl.textContent = '';
+        }, 3000);
+      }
+    });
+
+    async function submitPlayerUpdate(playerName, btn) {
+      const form = btn.closest('.player-update-form');
+      const countInput = form.querySelector('.update-count');
+      const amountInput = form.querySelector('.update-amount');
+      const count = parseFloat(countInput.value) || 0;
+      const amount = parseFloat(amountInput.value) || 0;
+
+      if (count === 0 && amount === 0) {
+        playersStatusEl.className = 'players-status error';
+        playersStatusEl.textContent = 'יש להזין כמות או סכום';
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'שומר...';
+
+      try {
+        await fetch(API_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'updatePlayer', name: playerName, count, amount })
+        });
+
+        playersStatusEl.className = 'players-status success';
+        playersStatusEl.textContent = `${playerName} עודכן בהצלחה!`;
+        openUpdateRow = null;
+
+        setTimeout(() => loadPlayers(true), 1500);
+      } catch (err) {
+        console.error(err);
+        playersStatusEl.className = 'players-status error';
+        playersStatusEl.textContent = 'שגיאה בעדכון שחקן';
+        btn.disabled = false;
+        btn.textContent = 'שמור';
+      } finally {
+        setTimeout(() => {
+          if (playersStatusEl.classList.contains('success')) playersStatusEl.textContent = '';
+        }, 3000);
+      }
+    }
+
+    async function deletePlayer(playerName, btn) {
+      if (!confirm('למחוק את השחקן "' + playerName + '"? הפעולה בלתי הפיכה.')) {
+        return;
+      }
+
+      playersStatusEl.className = 'players-status';
+      playersStatusEl.textContent = '';
+      btn.disabled = true;
+
+      if (openUpdateRow === playerName) {
+        openUpdateRow = null;
+      }
+
+      try {
+        await fetch(API_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'deletePlayer', name: playerName })
+        });
+
+        playersStatusEl.className = 'players-status success';
+        playersStatusEl.textContent = playerName + ' נמחק בהצלחה';
+        setTimeout(() => loadPlayers(true), 1500);
+      } catch (err) {
+        console.error(err);
+        playersStatusEl.className = 'players-status error';
+        playersStatusEl.textContent = 'שגיאה במחיקת שחקן';
+        btn.disabled = false;
+      } finally {
+        setTimeout(() => {
+          if (playersStatusEl.classList.contains('success')) playersStatusEl.textContent = '';
+        }, 3000);
+      }
+    }
+
     initUserSelection();
     loadTotals();
+    loadPlayers();
 
   </script>
 </body>
