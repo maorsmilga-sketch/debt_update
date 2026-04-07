@@ -403,28 +403,42 @@
     }
     .player-row-actions {
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       margin-right: auto;
+      flex-shrink: 0;
     }
     .player-delete-btn {
-      padding: 8px 14px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 34px;
+      height: 34px;
+      padding: 0;
       background: #fff;
-      border: 1.5px solid var(--error-color);
+      border: 1px solid #FECACA;
       color: var(--error-color);
       border-radius: 10px;
-      font-weight: 600;
-      font-size: 0.85rem;
       cursor: pointer;
       font-family: 'Rubik', sans-serif;
-      transition: all 0.2s;
+      transition: background-color 0.2s, border-color 0.2s, color 0.2s, transform 0.1s;
     }
     .player-delete-btn:hover {
-      background: var(--error-color);
-      color: white;
+      background: #FEF2F2;
+      border-color: var(--error-color);
+      color: #DC2626;
+    }
+    .player-delete-btn:active {
+      transform: scale(0.94);
     }
     .player-delete-btn:disabled {
-      opacity: 0.6;
+      opacity: 0.5;
       cursor: not-allowed;
+      transform: none;
+    }
+    .player-delete-btn svg {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
     }
     .player-list .skeleton-row {
       height: 52px;
@@ -574,10 +588,11 @@
       }
       .player-row-actions {
         margin-right: 0;
-        width: 100%;
+        width: auto;
+        align-self: flex-end;
       }
       .player-delete-btn {
-        width: 100%;
+        width: 34px;
         box-sizing: border-box;
       }
       .player-reset-count-btn {
@@ -987,7 +1002,11 @@
             </div>
           </div>
           <div class="player-row-actions">
-            <button type="button" class="player-delete-btn" onclick="deletePlayer('${jsName}', this)">מחק</button>
+            <button type="button" class="player-delete-btn" onclick="deletePlayer('${jsName}', this)" title="מחק שחקן" aria-label="מחק שחקן">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+              </svg>
+            </button>
           </div>
         </div>`;
       }).join('');
