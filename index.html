@@ -205,8 +205,16 @@
       font-size: 1.15rem;
       font-weight: 700;
       color: var(--text-main);
-      margin-bottom: 18px;
+      margin-bottom: 8px;
       text-align: center;
+    }
+    .players-bucket-hint {
+      font-size: 0.72rem;
+      color: var(--text-secondary);
+      text-align: center;
+      line-height: 1.45;
+      margin: 0 0 16px;
+      padding: 0 6px;
     }
     .add-player-form {
       display: flex;
@@ -662,6 +670,7 @@
     <!-- Player Management Section -->
     <div class="players-section">
       <div class="players-section-title">ניהול שחקנים</div>
+      <p class="players-bucket-hint">הכמות והסכום מחושבים לפי <strong>קבוצה נוכחית</strong> של עדכוני כמות+סכום בלבד: נלקחים עד 5 העדכונים האחרונים לפי שארית (למשל אחרי 6 עדכונים — רק האחרון; אחרי 13 — שלושת האחרונים). עדכון «הוסף סכום» בלבד לא נספר כאן.</p>
       <div class="players-period-control" id="playersPeriodControl">
         <span class="section-title" style="margin-bottom: 0;">תקופת סיכום</span>
         <div class="period-mode-row">
@@ -971,7 +980,7 @@
         return;
       }
       const periodRow = playersPeriodLabelActive
-        ? '<div class="player-period-hint" style="flex-basis:100%;width:100%;margin-top:2px;">כמות וסכום — בתקופה שנבחרה</div>'
+        ? '<div class="player-period-hint" style="flex-basis:100%;width:100%;margin-top:2px;">כמות וסכום (כמות+סכום) — בתקופה ובקבוצה הנוכחית</div>'
         : '';
       playerListEl.innerHTML = players.map(p => {
         const safeName = escapeHtml(p.name);

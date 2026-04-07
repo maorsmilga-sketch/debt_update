@@ -267,6 +267,39 @@ function getPlayerNamesOrdered_() {
 }
 
 /**
+ * רשומות { when, c, a } — רק שורות מזווגות (כמות+סכום).
+ * N = מספר העדכונים; k = N % 5, ואם 0 אז k=5. מסכמים את k השורות האחרונות לפי תאריך.
+ */
+function aggregatePairedDebtMod5_(pairedEntries) {
+  if (!pairedEntries || pairedEntries.length === 0) {
+    return { count: 0, amount: 0, lastUpdated: null };
+  }
+  const sorted = pairedEntries.slice().sort(function (x, y) {
+    return x.when.getTime() - y.when.getTime();
+  });
+  const N = sorted.length;
+  var k = N % 5;
+  if (k === 0) {
+    k = 5;
+  }
+  var start = N - k;
+  var count = 0;
+  var amount = 0;
+  var lastUpdated = null;
+  for (var i = start; i < N; i++) {
+    count += sorted[i].c;
+    amount += sorted[i].a;
+    var w = sorted[i].when;
+    if (w && !isNaN(w.getTime())) {
+      if (!lastUpdated || w.getTime() > lastUpdated.getTime()) {
+        lastUpdated = w;
+      }
+    }
+  }
+  return { count: count, amount: amount, lastUpdated: lastUpdated };
+}
+
+/**
  * params: אובייקט מ-e.parameter — action, fromYm, toYm (אופציונלי)
  */
 function getPlayers_(params) {
@@ -299,10 +332,7 @@ function getPlayers_(params) {
   }
 
   const playerNames = getPlayerNamesOrdered_();
-  const aggregates = {};
-  for (let i = 0; i < playerNames.length; i++) {
-    aggregates[playerNames[i]] = { count: 0, amount: 0, lastUpdated: null };
-  }
+  const pairedByPlayer = {};
 
   if (debtSheet && debtSheet.getLastRow() >= 2) {
     const lastRow = debtSheet.getLastRow();
@@ -316,30 +346,30 @@ function getPlayers_(params) {
       const c = Number(row[2]) || 0;
       const a = Number(row[3]) || 0;
 
+      if (c === 0 || a === 0) {
+        continue;
+      }
+
+      if (!when || isNaN(when.getTime())) {
+        continue;
+      }
+
       if (rangeFilter) {
-        if (!when || isNaN(when.getTime())) continue;
         const t = when.getTime();
         if (t < rangeFilter.start.getTime() || t > rangeFilter.end.getTime()) continue;
       }
 
-      if (!aggregates.hasOwnProperty(name)) {
-        aggregates[name] = { count: 0, amount: 0, lastUpdated: null };
+      if (!pairedByPlayer[name]) {
+        pairedByPlayer[name] = [];
       }
-      const agg = aggregates[name];
-      agg.count += c;
-      agg.amount += a;
-      if (when && !isNaN(when.getTime())) {
-        if (!agg.lastUpdated || when.getTime() > agg.lastUpdated.getTime()) {
-          agg.lastUpdated = when;
-        }
-      }
+      pairedByPlayer[name].push({ when: when, c: c, a: a });
     }
   }
 
   const players = [];
   for (let i = 0; i < playerNames.length; i++) {
     const nm = playerNames[i];
-    const agg = aggregates[nm] || { count: 0, amount: 0, lastUpdated: null };
+    const agg = aggregatePairedDebtMod5_(pairedByPlayer[nm]);
     const row = {
       name: nm,
       count: agg.count,
