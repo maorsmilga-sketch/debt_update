@@ -40,8 +40,10 @@
       border-radius: 24px;
       box-shadow: var(--shadow);
       padding: 30px;
-      overflow: hidden;
-      position: relative; 
+      overflow-x: hidden;
+      overflow-y: visible;
+      position: relative;
+      box-sizing: border-box;
     }
 
     /* לוגואים */
@@ -210,9 +212,12 @@
       display: flex;
       gap: 10px;
       margin-bottom: 20px;
+      align-items: stretch;
+      flex-wrap: wrap;
     }
     .add-player-form input {
-      flex: 1;
+      flex: 1 1 140px;
+      min-width: 0;
       padding: 12px 15px;
       border: 1px solid var(--border-color);
       border-radius: 12px;
@@ -229,7 +234,8 @@
       box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1);
     }
     .add-player-form button {
-      padding: 12px 20px;
+      flex: 0 1 auto;
+      padding: 12px 16px;
       background-color: var(--primary-color);
       color: white;
       border: none;
@@ -240,6 +246,7 @@
       font-family: 'Rubik', sans-serif;
       white-space: nowrap;
       transition: background-color 0.2s;
+      box-sizing: border-box;
     }
     .add-player-form button:hover { background-color: var(--primary-hover); }
     .add-player-form button:disabled { background-color: #9CA3AF; cursor: not-allowed; }
@@ -261,12 +268,23 @@
       transition: border-color 0.2s;
     }
     .player-row:hover { border-color: #D1D5DB; }
+    .player-name-block {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 72px;
+      flex-shrink: 0;
+    }
     .player-name {
       font-weight: 600;
       font-size: 0.95rem;
       color: var(--text-main);
-      min-width: 72px;
-      flex-shrink: 0;
+    }
+    .player-last-updated {
+      font-size: 0.7rem;
+      color: var(--text-secondary);
+      line-height: 1.25;
+      max-width: 100%;
     }
     .player-controls {
       display: flex;
@@ -308,6 +326,30 @@
     .player-plus-one-btn:hover { background: var(--primary-hover); }
     .player-plus-one-btn:active { transform: scale(0.96); }
     .player-plus-one-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+    .player-reset-count-btn {
+      padding: 6px 10px;
+      background: #fff;
+      border: 1.5px solid var(--text-secondary);
+      color: var(--text-secondary);
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.78rem;
+      cursor: pointer;
+      font-family: 'Rubik', sans-serif;
+      transition: all 0.2s, transform 0.1s;
+      white-space: nowrap;
+    }
+    .player-reset-count-btn:hover {
+      background: #F3F4F6;
+      border-color: #6B7280;
+      color: var(--text-main);
+    }
+    .player-reset-count-btn:active { transform: scale(0.96); }
+    .player-reset-count-btn:disabled {
       opacity: 0.6;
       cursor: not-allowed;
       transform: none;
@@ -406,6 +448,143 @@
       font-size: 0.9rem;
       padding: 20px 0;
     }
+    .players-period-control {
+      margin-bottom: 18px;
+      padding: 14px;
+      background: #F9FAFB;
+      border-radius: 14px;
+      border: 1px solid var(--border-color);
+    }
+    .period-mode-row {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 8px;
+      font-size: 0.9rem;
+    }
+    .period-mode-row label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      color: var(--text-main);
+    }
+    .period-inputs {
+      margin-top: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      font-size: 0.88rem;
+    }
+    .period-inputs label {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      color: var(--text-secondary);
+    }
+    .period-inputs input[type="month"] {
+      padding: 10px 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      font-family: 'Rubik', sans-serif;
+      font-size: 0.95rem;
+      background: #fff;
+      max-width: 100%;
+      box-sizing: border-box;
+    }
+    .period-inputs input[type="month"]:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.1);
+    }
+    .player-period-hint {
+      font-size: 0.65rem;
+      color: var(--text-secondary);
+      font-weight: 500;
+      margin-top: 2px;
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding: 12px;
+        align-items: flex-start;
+      }
+      .container {
+        padding: 18px 14px;
+        border-radius: 20px;
+        max-width: 100%;
+      }
+      h1 {
+        font-size: 1.35rem;
+        margin-bottom: 18px;
+      }
+      .add-player-form {
+        flex-direction: column;
+        flex-wrap: nowrap;
+        gap: 10px;
+      }
+      .add-player-form input {
+        flex: none;
+        width: 100%;
+      }
+      .add-player-form button {
+        width: 100%;
+        white-space: normal;
+        padding: 13px 14px;
+        line-height: 1.35;
+      }
+      .players-period-control {
+        padding: 12px;
+      }
+      .player-row {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 12px 12px;
+      }
+      .player-name-block {
+        width: 100%;
+      }
+      .player-controls {
+        width: 100%;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+      }
+      .player-count-ctrl {
+        width: 100%;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+      }
+      .player-total-display {
+        width: 100%;
+      }
+      .player-amount-add {
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+      }
+      .player-amount-input {
+        flex: 1 1 100px;
+        min-width: 0;
+        width: auto;
+        max-width: 100%;
+      }
+      .player-row-actions {
+        margin-right: 0;
+        width: 100%;
+      }
+      .player-delete-btn {
+        width: 100%;
+        box-sizing: border-box;
+      }
+      .player-reset-count-btn {
+        font-size: 0.72rem;
+        padding: 6px 8px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -468,6 +647,39 @@
     <!-- Player Management Section -->
     <div class="players-section">
       <div class="players-section-title">ניהול שחקנים</div>
+      <div class="players-period-control" id="playersPeriodControl">
+        <span class="section-title" style="margin-bottom: 0;">תקופת סיכום</span>
+        <div class="period-mode-row">
+          <label>
+            <input type="radio" name="playersPeriodMode" value="all" checked>
+            כל התקופה
+          </label>
+          <label>
+            <input type="radio" name="playersPeriodMode" value="single">
+            חודש בודד
+          </label>
+          <label>
+            <input type="radio" name="playersPeriodMode" value="range">
+            טווח חודשים
+          </label>
+        </div>
+        <div id="periodSingleWrap" class="period-inputs" style="display: none;">
+          <label>
+            חודש ושנה
+            <input type="month" id="playersPeriodSingle" aria-label="חודש ושנה לסיכום">
+          </label>
+        </div>
+        <div id="periodRangeWrap" class="period-inputs" style="display: none;">
+          <label>
+            מחודש
+            <input type="month" id="playersPeriodFrom" aria-label="חודש התחלה">
+          </label>
+          <label>
+            עד חודש (כולל)
+            <input type="month" id="playersPeriodTo" aria-label="חודש סיום">
+          </label>
+        </div>
+      </div>
       <div class="add-player-form">
         <input type="text" id="newPlayerName" placeholder="שם שחקן חדש">
         <button type="button" id="addPlayerBtn">הוסף שחקן</button>
@@ -483,7 +695,7 @@
 
   <script>
     // ==========================================
-    const API_URL = 'https://script.google.com/macros/s/AKfycbzPr309QGJevk8eg9uCUiOy9C99fZM5xWmMkFZKNfHybInaCMDJXuNp0Zd2mi4RUECF8A/exec';
+    const API_URL = 'https://script.google.com/macros/s/AKfycbyulObiNcnWdox6DgMHSOZeoAVUpcYpY3rgKNUZv8UmYSUP9uwUovS_w4tifGNCMu_mrQ/exec';
     // ==========================================
 
     const statusEl = document.getElementById('status');
@@ -499,7 +711,89 @@
 
     const USER_STORAGE_KEY = 'selectedUserMaorIdo_V2';
     const TOTALS_CACHE_KEY = 'cachedTotals_V2';
-    const PLAYERS_CACHE_KEY = 'cachedPlayers_V1';
+    const PLAYERS_CACHE_PREFIX = 'cachedPlayers_V2_';
+
+    let playersPeriodLabelActive = false;
+
+    function currentYmString() {
+      const now = new Date();
+      return now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0');
+    }
+
+    function syncPeriodPanelVisibility() {
+      const modeEl = document.querySelector('input[name="playersPeriodMode"]:checked');
+      const mode = modeEl ? modeEl.value : 'all';
+      const singleWrap = document.getElementById('periodSingleWrap');
+      const rangeWrap = document.getElementById('periodRangeWrap');
+      if (singleWrap) singleWrap.style.display = mode === 'single' ? 'flex' : 'none';
+      if (rangeWrap) rangeWrap.style.display = mode === 'range' ? 'flex' : 'none';
+    }
+
+    function getPlayersPeriodState() {
+      const modeEl = document.querySelector('input[name="playersPeriodMode"]:checked');
+      const mode = modeEl ? modeEl.value : 'all';
+      if (mode === 'all') {
+        return {
+          ok: true,
+          query: '',
+          cacheKey: PLAYERS_CACHE_PREFIX + 'all',
+          showPeriodLabel: false
+        };
+      }
+      if (mode === 'single') {
+        const v = document.getElementById('playersPeriodSingle').value;
+        if (!v) {
+          return { ok: false, message: 'יש לבחור חודש ושנה' };
+        }
+        const q = '&fromYm=' + encodeURIComponent(v) + '&toYm=' + encodeURIComponent(v);
+        return {
+          ok: true,
+          query: q,
+          cacheKey: PLAYERS_CACHE_PREFIX + 'm_' + v,
+          showPeriodLabel: true
+        };
+      }
+      if (mode === 'range') {
+        const from = document.getElementById('playersPeriodFrom').value;
+        const to = document.getElementById('playersPeriodTo').value;
+        if (!from || !to) {
+          return { ok: false, message: 'יש לבחור חודש התחלה וחודש סיום' };
+        }
+        if (from > to) {
+          return { ok: false, message: 'חודש ההתחלה לא יכול להיות אחרי חודש הסיום' };
+        }
+        const q = '&fromYm=' + encodeURIComponent(from) + '&toYm=' + encodeURIComponent(to);
+        const safe = (s) => s.replace(/[^0-9-]/g, '');
+        return {
+          ok: true,
+          query: q,
+          cacheKey: PLAYERS_CACHE_PREFIX + safe(from) + '_' + safe(to),
+          showPeriodLabel: true
+        };
+      }
+      return { ok: true, query: '', cacheKey: PLAYERS_CACHE_PREFIX + 'all', showPeriodLabel: false };
+    }
+
+    function initPlayerPeriodControls() {
+      const ym = currentYmString();
+      const single = document.getElementById('playersPeriodSingle');
+      const from = document.getElementById('playersPeriodFrom');
+      const to = document.getElementById('playersPeriodTo');
+      if (single) single.value = ym;
+      if (from) from.value = ym;
+      if (to) to.value = ym;
+
+      document.querySelectorAll('input[name="playersPeriodMode"]').forEach(function (r) {
+        r.addEventListener('change', function () {
+          syncPeriodPanelVisibility();
+          loadPlayers(true);
+        });
+      });
+      [single, from, to].forEach(function (el) {
+        if (el) el.addEventListener('change', function () { loadPlayers(true); });
+      });
+      syncPeriodPanelVisibility();
+    }
 
     function initUserSelection() {
       const radios = document.querySelectorAll('input[name="user"]');
@@ -649,30 +943,46 @@
       return String(str).replace(/\\/g, '\\\\').replace(/'/g, "\\'");
     }
 
+    function formatPlayerLastUpdated(iso) {
+      if (!iso) return 'עדיין לא עודכן';
+      const d = new Date(iso);
+      if (isNaN(d.getTime())) return 'עדיין לא עודכן';
+      return d.toLocaleString('he-IL', { dateStyle: 'short', timeStyle: 'short' });
+    }
+
     function renderPlayers(players) {
       if (!players || players.length === 0) {
         playerListEl.innerHTML = '<div class="player-empty">אין שחקנים עדיין. הוסף שחקן חדש למעלה.</div>';
         return;
       }
+      const periodRow = playersPeriodLabelActive
+        ? '<div class="player-period-hint" style="flex-basis:100%;width:100%;margin-top:2px;">כמות וסכום — בתקופה שנבחרה</div>'
+        : '';
       playerListEl.innerHTML = players.map(p => {
         const safeName = escapeHtml(p.name);
         const jsName = jsStringLiteral(p.name);
         const dataPlayer = encodeURIComponent(p.name);
+        const lastLine = formatPlayerLastUpdated(p.lastUpdated);
         return `
         <div class="player-row" data-player="${dataPlayer}">
-          <div class="player-name">${safeName}</div>
+          <div class="player-name-block">
+            <div class="player-name">${safeName}</div>
+            <div class="player-last-updated">${escapeHtml(lastLine)}</div>
+          </div>
           <div class="player-controls">
             <div class="player-count-ctrl">
               <span class="player-stat-label">כמות</span>
               <span class="player-count-val">${(p.count || 0).toLocaleString()}</span>
-              <button type="button" class="player-plus-one-btn" onclick="incrementPlayerCount('${jsName}', this)">+1</button>
+              <button type="button" class="player-plus-one-btn" onclick="incrementPlayerCount('${jsName}', this)" title="נדרש למלא סכום בשדה למטה לפני לחיצה">+1</button>
+              <button type="button" class="player-reset-count-btn" onclick="resetPlayerCount('${jsName}', this)" title="מאפס את סך הכמות המצטבר מכל הזמנים">איפוס כמות</button>
             </div>
             <div class="player-total-display">
               <span class="player-stat-label">סכום</span>
               <span class="player-amount-val">${(p.amount || 0).toLocaleString()} ₪</span>
             </div>
+            ${periodRow}
             <div class="player-amount-add">
-              <input type="number" class="player-amount-input" step="any" placeholder="הוסף לסכום" inputmode="decimal" aria-label="סכום להוספה">
+              <input type="number" class="player-amount-input" step="any" placeholder="סכום (חובה לפני +1)" inputmode="decimal" aria-label="סכום להוספה; נדרש לפני עדכון כמות">
               <button type="button" class="player-add-amount-btn" onclick="submitPlayerAmount('${jsName}', this)">הוסף סכום</button>
             </div>
           </div>
@@ -684,18 +994,44 @@
     }
 
     async function loadPlayers(forceRefresh = false) {
-      const cached = localStorage.getItem(PLAYERS_CACHE_KEY);
-
-      if (cached && !forceRefresh) {
-        renderPlayers(JSON.parse(cached));
+      const period = getPlayersPeriodState();
+      if (!period.ok) {
+        playersStatusEl.className = 'players-status error';
+        playersStatusEl.textContent = period.message;
+        return;
       }
 
+      playersPeriodLabelActive = period.showPeriodLabel;
+      const cacheKey = period.cacheKey;
+      const cached = localStorage.getItem(cacheKey);
+
+      if (cached && !forceRefresh) {
+        try {
+          renderPlayers(JSON.parse(cached));
+        } catch (e) {
+          console.error(e);
+        }
+      }
+
+      playersStatusEl.className = 'players-status';
+      playersStatusEl.textContent = '';
+
       try {
-        const res = await fetch(API_URL + '?action=getPlayers');
+        const url = API_URL + '?action=getPlayers' + period.query;
+        const res = await fetch(url);
         const data = await res.json();
+        if (!data.success) {
+          playersStatusEl.className = 'players-status error';
+          playersStatusEl.textContent = data.error || 'שגיאה בטעינת שחקנים';
+          if (!cached) {
+            playerListEl.innerHTML = '<div class="player-empty">לא ניתן לטעון שחקנים</div>';
+          }
+          return;
+        }
         const players = data.players || [];
-        localStorage.setItem(PLAYERS_CACHE_KEY, JSON.stringify(players));
+        localStorage.setItem(cacheKey, JSON.stringify(players));
         renderPlayers(players);
+        playersStatusEl.textContent = '';
       } catch (err) {
         console.error('Error loading players:', err);
         if (!cached) {
@@ -756,19 +1092,69 @@
     }
 
     async function incrementPlayerCount(playerName, btn) {
+      const row = btn.closest('.player-row');
+      const input = row ? row.querySelector('.player-amount-input') : null;
+      const amountStr = input ? input.value.trim() : '';
+      const amount = parseFloat(amountStr);
+
       playersStatusEl.className = 'players-status';
       playersStatusEl.textContent = '';
+
+      if (amountStr === '' || isNaN(amount)) {
+        playersStatusEl.className = 'players-status error';
+        playersStatusEl.textContent = 'יש להזין סכום בשדה למטה לפני עדכון כמות (+1)';
+        if (input) input.focus();
+        return;
+      }
+      if (amount === 0) {
+        playersStatusEl.className = 'players-status error';
+        playersStatusEl.textContent = 'יש להזין סכום השונה מאפס לפני עדכון כמות';
+        if (input) input.focus();
+        return;
+      }
+
       btn.disabled = true;
 
       try {
-        await postPlayerUpdate(playerName, 1, 0);
+        await postPlayerUpdate(playerName, 1, amount);
         playersStatusEl.className = 'players-status success';
-        playersStatusEl.textContent = 'כמות עודכנה (+1)';
+        playersStatusEl.textContent = 'כמות וסכום עודכנו (+1)';
         await loadPlayers(true);
       } catch (err) {
         console.error(err);
         playersStatusEl.className = 'players-status error';
         playersStatusEl.textContent = 'שגיאה בעדכון כמות';
+      } finally {
+        if (document.body.contains(btn)) btn.disabled = false;
+        setTimeout(() => {
+          if (playersStatusEl.classList.contains('success')) playersStatusEl.textContent = '';
+        }, 2500);
+      }
+    }
+
+    async function resetPlayerCount(playerName, btn) {
+      if (!confirm('לאפס את סך הכמות המצטבר של "' + playerName + '" ל־0?\nהחישוב הוא על כל הזמנים (לא רק התקופה המוצגת), ונרשמת שורה ביומן Debt.')) {
+        return;
+      }
+
+      playersStatusEl.className = 'players-status';
+      playersStatusEl.textContent = '';
+      btn.disabled = true;
+
+      try {
+        await fetch(API_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'resetPlayerCount', name: playerName })
+        });
+        playersStatusEl.className = 'players-status success';
+        playersStatusEl.textContent = 'כמות אופסה (סך מצטבר)';
+        await loadPlayers(true);
+      } catch (err) {
+        console.error(err);
+        playersStatusEl.className = 'players-status error';
+        playersStatusEl.textContent = 'שגיאה באיפוס כמות';
       } finally {
         if (document.body.contains(btn)) btn.disabled = false;
         setTimeout(() => {
@@ -846,6 +1232,7 @@
     }
 
     initUserSelection();
+    initPlayerPeriodControls();
     loadTotals();
     loadPlayers();
 
