@@ -330,30 +330,6 @@
       cursor: not-allowed;
       transform: none;
     }
-    .player-reset-count-btn {
-      padding: 6px 10px;
-      background: #fff;
-      border: 1.5px solid var(--text-secondary);
-      color: var(--text-secondary);
-      border-radius: 8px;
-      font-weight: 600;
-      font-size: 0.78rem;
-      cursor: pointer;
-      font-family: 'Rubik', sans-serif;
-      transition: all 0.2s, transform 0.1s;
-      white-space: nowrap;
-    }
-    .player-reset-count-btn:hover {
-      background: #F3F4F6;
-      border-color: #6B7280;
-      color: var(--text-main);
-    }
-    .player-reset-count-btn:active { transform: scale(0.96); }
-    .player-reset-count-btn:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-      transform: none;
-    }
     .player-total-display {
       display: flex;
       align-items: baseline;
@@ -536,10 +512,6 @@
       .player-delete-btn {
         width: 34px;
         box-sizing: border-box;
-      }
-      .player-reset-count-btn {
-        font-size: 0.72rem;
-        padding: 6px 8px;
       }
     }
   </style>
@@ -813,7 +785,6 @@
               <span class="player-stat-label">כמות</span>
               <span class="player-count-val">${(p.count || 0).toLocaleString()}</span>
               <button type="button" class="player-plus-one-btn" onclick="incrementPlayerCount('${jsName}', this)" title="נדרש למלא סכום בשדה למטה לפני לחיצה">+1</button>
-              <button type="button" class="player-reset-count-btn" onclick="resetPlayerCount('${jsName}', this)" title="מאפס את סך הכמות המצטבר מכל הזמנים">איפוס כמות</button>
             </div>
             <div class="player-total-display">
               <span class="player-stat-label">סכום</span>
@@ -956,37 +927,6 @@
         console.error(err);
         playersStatusEl.className = 'players-status error';
         playersStatusEl.textContent = 'שגיאה בעדכון כמות';
-      } finally {
-        if (document.body.contains(btn)) btn.disabled = false;
-        setTimeout(() => {
-          if (playersStatusEl.classList.contains('success')) playersStatusEl.textContent = '';
-        }, 2500);
-      }
-    }
-
-    async function resetPlayerCount(playerName, btn) {
-      if (!confirm('לאפס את סך הכמות המצטבר של "' + playerName + '" ל־0?\nנרשמת שורה ביומן Debt.')) {
-        return;
-      }
-
-      playersStatusEl.className = 'players-status';
-      playersStatusEl.textContent = '';
-      btn.disabled = true;
-
-      try {
-        await fetch(API_URL, {
-          method: 'POST',
-          mode: 'no-cors',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ action: 'resetPlayerCount', name: playerName })
-        });
-        playersStatusEl.className = 'players-status success';
-        playersStatusEl.textContent = 'כמות אופסה (סך מצטבר)';
-        await loadPlayers(true);
-      } catch (err) {
-        console.error(err);
-        playersStatusEl.className = 'players-status error';
-        playersStatusEl.textContent = 'שגיאה באיפוס כמות';
       } finally {
         if (document.body.contains(btn)) btn.disabled = false;
         setTimeout(() => {

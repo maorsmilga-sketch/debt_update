@@ -10,7 +10,7 @@ const DEBT_HEADERS_NEW_ = ['תאריך ושעה', 'שחקן', 'דלתא כמות
 /**
  * קריאה ב-POST מה-HTML:
  * ללא action (או action ריק): { "user": "מאור" | "עידו", "amount": מספר, "note": "..." }
- * עם action: addPlayer | updatePlayer | deletePlayer | resetPlayerCount
+ * עם action: addPlayer | updatePlayer | deletePlayer
  */
 function doPost(e) {
   try {
@@ -32,9 +32,6 @@ function doPost(e) {
     }
     if (action === 'deletePlayer') {
       return deletePlayer_(data.name);
-    }
-    if (action === 'resetPlayerCount') {
-      return resetPlayerCount_(data.name);
     }
 
     const user = data.user;
@@ -434,48 +431,6 @@ function updatePlayer_(name, countDelta, amountDelta) {
 
   const now = new Date();
   debtSheet.appendRow([now, target, c, a]);
-
-  return jsonResponse_({ success: true });
-}
-
-/**
- * מאפס את סך הכמות המצטבר ב-Debt (על כל הזמנים) באמצעות שורת דלתא אחת שלילית.
- */
-function resetPlayerCount_(name) {
-  if (!name || String(name).trim() === '') {
-    return jsonResponse_({ success: false, error: 'Missing player name' });
-  }
-
-  const target = String(name).trim();
-  if (!playerExistsInPlayersSheet_(target)) {
-    return jsonResponse_({ success: false, error: 'Player not found' });
-  }
-
-  const ss = SpreadsheetApp.getActiveSpreadsheet();
-  const debtSheet = ss.getSheetByName(DEBT_SHEET_NAME);
-  if (!debtSheet || debtSheet.getLastRow() < 2) {
-    return jsonResponse_({ success: true });
-  }
-  if (isLegacyDebtSheet_(debtSheet)) {
-    return legacyDebtErrorResponse_();
-  }
-
-  const lastRow = debtSheet.getLastRow();
-  const data = debtSheet.getRange(2, 1, lastRow, 4).getValues();
-  let sum = 0;
-  for (let r = 0; r < data.length; r++) {
-    const playerName = data[r][1];
-    if (playerName === '' || playerName === null || playerName === undefined) continue;
-    if (String(playerName).trim() !== target) continue;
-    sum += Number(data[r][2]) || 0;
-  }
-
-  if (sum === 0) {
-    return jsonResponse_({ success: true });
-  }
-
-  const now = new Date();
-  debtSheet.appendRow([now, target, -sum, 0]);
 
   return jsonResponse_({ success: true });
 }
